@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="hr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Porton</title>
+    <link rel="icon" href="assets/logo.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <!-- Icons used on the page. Drawn once here, used with <use href="#i-name">. -->
+    <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+        <defs>
+            <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></symbol>
+            <symbol id="i-table" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></symbol>
+            <symbol id="i-bars" viewBox="0 0 24 24"><path d="M12 20V10M18 20V4M6 20v-4"/></symbol>
+            <symbol id="i-checks" viewBox="0 0 24 24"><path d="m3 6 1.5 1.5L7 5M3 12l1.5 1.5L7 11M3 18l1.5 1.5L7 17M10 6h11M10 12h11M10 18h11"/></symbol>
+            <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z"/></symbol>
+            <symbol id="i-building" viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4M8 6h.01M12 6h.01M16 6h.01M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01"/></symbol>
+            <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+            <symbol id="i-trend" viewBox="0 0 24 24"><path d="m22 7-8.5 8.5-5-5L2 17M16 7h6v6"/></symbol>
+            <symbol id="i-sort" viewBox="0 0 24 24"><path d="m3 8 4-4 4 4M7 4v16M11 12h4M11 16h7M11 20h10"/></symbol>
+            <symbol id="i-paw" viewBox="0 0 24 24"><g fill="currentColor" stroke="none"><circle cx="6.5" cy="10" r="2"/><circle cx="10.5" cy="5.5" r="2"/><circle cx="16.5" cy="5.5" r="2"/><circle cx="20" cy="10" r="2"/><path d="M13.5 11.5c-3 0-6 3-6 6 0 2 1.5 3 3 3 1.5 0 2-1 3-1s1.5 1 3 1c1.5 0 3-1 3-3 0-3-3-6-6-6z"/></g></symbol>
+            <symbol id="i-checkcircle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></symbol>
+            <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></symbol>
+            <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
+            <symbol id="i-wrench" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94z"/></symbol>
+            <symbol id="i-bed" viewBox="0 0 24 24"><path d="M2 4v16M2 8h18a2 2 0 0 1 2 2v10M2 17h20M6 8v9"/></symbol>
+            <symbol id="i-bookmark" viewBox="0 0 24 24"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></symbol>
+            <symbol id="i-umbrella" viewBox="0 0 24 24"><path d="M22 12a10 10 0 0 0-20 0Z M12 12v8a2 2 0 0 0 4 0"/></symbol>
+            <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></symbol>
+            <symbol id="i-check" viewBox="0 0 24 24"><path d="m9 11 3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></symbol>
+            <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></symbol>
+            <symbol id="i-users" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+            <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></symbol>
+        </defs>
+    </svg>
+
+    <div class="lang" role="group" aria-label="Language">
+        <button type="button" data-lang="hr">HR</button>
+        <button type="button" data-lang="en">EN</button>
+    </div>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <img src="assets/logo.svg" alt="" class="logo" />
+        <div id="nav"></div>
+        <div class="sidebar-camp">
+            <svg class="icon"><use href="#i-building" /></svg>
+            <span data-i18n="NAV.YOUR_CAMP"></span>
+            <svg class="icon chevron"><use href="#i-chevron" /></svg>
+        </div>
+    </aside>
+
+    <main class="canvas">
+        <div class="container">
+            <!-- HERO -->
+            <section id="hero" class="hero">
+                <span class="badge" data-i18n="HERO.BADGE"></span>
+                <h1 class="h1">
+                    <span data-i18n="HERO.TITLE"></span>
+                    <span class="accent" data-i18n="HERO.TITLE_ACCENT"></span>
+                </h1>
+                <p class="lead" data-i18n="HERO.TEXT"></p>
+                <div class="actions">
+                    <a class="btn btn-primary btn-lg" data-app-link="/create-camp/account" data-i18n="HERO.CTA_PRIMARY"></a>
+                </div>
+            </section>
+
+            <!-- KPI ROW -->
+            <section id="kpis" class="kpis"></section>
+
+            <!-- HOUSES: copy of the Home page's houses widget (light mode) -->
+            <section id="houses" class="hw-section">
+                <div class="hw-card">
+                    <div class="hw-bar">
+                        <span class="hw-title">
+                            <svg class="icon"><use href="#i-home" /></svg>
+                            <span data-i18n="HOUSES.TITLE"></span>
+                            <span class="hw-pill" id="hw-count"></span>
+                        </span>
+                        <div class="hw-controls">
+                            <div class="hw-sort">
+                                <span class="hw-select"><svg class="icon"><use href="#i-sort" /></svg><span data-i18n="HOUSES.SORT"></span><svg class="icon chevron"><use href="#i-chevron" /></svg></span>
+                                <button type="button" class="hw-btn" data-i18n-title="HOUSES.DOGS"><svg class="icon"><use href="#i-paw" /></svg></button>
+                                <button type="button" class="hw-btn" data-i18n-title="HOUSES.CONFIRM"><svg class="icon"><use href="#i-checkcircle" /></svg></button>
+                                <button type="button" class="hw-btn" data-i18n-title="HOUSES.DETAILS"><svg class="icon"><use href="#i-eye" /></svg></button>
+                            </div>
+                            <button type="button" class="hw-search" data-i18n-title="HOUSES.SEARCH"><svg class="icon"><use href="#i-search" /></svg></button>
+                        </div>
+                    </div>
+                    <div class="hw-body"><div class="hw-grid" id="hw-grid"></div></div>
+                    <div class="hw-legend">
+                        <span class="hw-legend-item"><span class="hw-dot hw-green"></span><span data-i18n="HOUSES.LEGEND_FREE_CLEANED"></span></span>
+                        <span class="hw-legend-item"><span class="hw-dot hw-yellow"></span><span data-i18n="HOUSES.LEGEND_FREE_NOT_CLEANED"></span></span>
+                        <span class="hw-legend-item"><span class="hw-dot hw-red"></span><span data-i18n="HOUSES.LEGEND_OCCUPIED"></span></span>
+                        <span class="hw-legend-item"><span class="hw-dot hw-lightred"></span><span data-i18n="HOUSES.LEGEND_ARRIVAL"></span></span>
+                        <span class="hw-legend-item"><span class="hw-dot hw-gray"></span><span data-i18n="HOUSES.LEGEND_INACTIVE"></span></span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FEATURES -->
+            <section id="platform" class="section">
+                <div class="section-head">
+                    <span class="eyebrow" data-i18n="FEATURES.EYEBROW"></span>
+                    <h2 class="h2" data-i18n="FEATURES.TITLE"></h2>
+                </div>
+                <div id="features" class="grid features"></div>
+            </section>
+
+            <!-- CALL TO ACTION -->
+            <section id="demo" class="section section-last">
+                <div class="cta">
+                    <span class="eyebrow" data-i18n="CTA.EYEBROW"></span>
+                    <h2 class="h2" data-i18n="CTA.TITLE"></h2>
+                    <p class="section-text" data-i18n="CTA.TEXT"></p>
+                    <div class="actions center">
+                        <a class="btn btn-primary btn-lg" data-app-link="/create-camp/account" data-i18n="CTA.PRIMARY"></a>
+                        <a class="btn btn-outline btn-lg" data-app-link="/login" data-i18n="CTA.SECONDARY"></a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FOOTER -->
+            <footer class="footer">
+                <div class="footer-grid">
+                    <div>
+                        <img src="assets/logo.svg" alt="" class="logo" />
+                        <p class="footer-blurb" data-i18n="FOOTER.BLURB"></p>
+                    </div>
+                    <div>
+                        <h4 class="footer-title" data-i18n="FOOTER.PRODUCT"></h4>
+                        <a class="footer-link" href="#platform" data-i18n="FOOTER.LINK_FEATURES"></a>
+                    </div>
+                    <div>
+                        <h4 class="footer-title" data-i18n="FOOTER.COMPANY"></h4>
+                        <a class="footer-link" data-app-link="/login" data-i18n="FOOTER.LINK_LOGIN"></a>
+                        <a class="footer-link" data-app-link="/create-camp/account" data-i18n="FOOTER.LINK_SIGNUP"></a>
+                        <a class="footer-link" data-app-link="/privacy-policy" data-i18n="FOOTER.LINK_PRIVACY"></a>
+                    </div>
+                </div>
+                <div class="footer-bottom"><span data-i18n="FOOTER.COPYRIGHT"></span></div>
+            </footer>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
