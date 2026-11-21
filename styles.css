@@ -1,20 +1,20 @@
-/* Porton landing page. Standalone: no framework, no link to the app's code. */
+/* Porton landing page. Standalone: no framework, no link to the app's code.
+   Palette comes from the camp photo and the app's lime: forest, lime, pool blue.
+   Type: Bricolage Grotesque for headings, Instrument Sans for text. */
 
 :root {
-    --bg: #ffffff;
-    --card: #ffffff;
-    --soft: #f1f2f4;
-    --border: #e7e9ec;
-    --fg: #0f172a;
-    --fg2: #475569;
-    --fg3: #94a3b8;
+    --forest: #0b0f0f;
+    --forest-2: #161a1a;
     --lime: #c3f832;
-    --good: #15803d;
-    --bad: #dc2626;
-    --shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 8px 24px rgba(15, 23, 42, 0.06);
-    --shadow-hover: 0 2px 4px rgba(15, 23, 42, 0.05), 0 16px 40px rgba(15, 23, 42, 0.1);
-    --sidebar-w: 236px;
-    --mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+    --pool: #1b9fd1;
+    --bg: #0f1414;
+    --bg-2: #161a1a;
+    --paper: var(--bg);
+    --ink: #f2f6f3;
+    --stone: #b3c3ba;
+    --line: rgba(255, 255, 255, 0.12);
+    --display: 'Bricolage Grotesque', 'Instrument Sans', system-ui, sans-serif;
+    --text: 'Instrument Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 }
 
 * {
@@ -27,9 +27,11 @@ html {
 
 body {
     margin: 0;
-    background: var(--bg);
-    color: var(--fg);
-    font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--text);
+    font-size: 17px;
+    line-height: 1.6;
     -webkit-font-smoothing: antialiased;
 }
 
@@ -41,7 +43,6 @@ a {
 h1,
 h2,
 h3,
-h4,
 p {
     margin: 0;
 }
@@ -50,488 +51,1050 @@ button {
     font: inherit;
 }
 
-.icon {
-    width: 16px;
-    height: 16px;
-    flex: none;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
+a:focus-visible,
+button:focus-visible {
+    outline: 3px solid var(--pool);
+    outline-offset: 3px;
+    border-radius: 6px;
 }
 
-/* ---------- language switch ---------- */
-.lang {
-    position: fixed;
-    top: 14px;
-    right: 14px;
-    z-index: 60;
-    display: flex;
-    padding: 3px;
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(8px);
-    box-shadow: var(--shadow);
+.wrap {
+    max-width: 1312px;
+    margin: 0 auto;
+    padding: 0 24px;
 }
 
-.lang button {
-    padding: 5px 12px;
-    border: 0;
-    border-radius: 999px;
-    background: transparent;
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--fg2);
-    cursor: pointer;
+@media (min-width: 992px) {
+    .wrap {
+        padding: 0 64px;
+    }
 }
 
-.lang button.active {
-    background: var(--fg);
-    color: #ffffff;
+/* The camp photo, darker toward the bottom and the left so text on it stays readable. */
+.photo {
+    background-image: linear-gradient(90deg, rgba(11, 15, 15, 0.86) 0%, rgba(11, 15, 15, 0.5) 52%, rgba(11, 15, 15, 0.12) 100%), linear-gradient(0deg, rgba(11, 15, 15, 0.7) 0%, rgba(11, 15, 15, 0) 45%), url('assets/hero.jpg');
+    background-size: cover;
+    background-position: center;
 }
 
 /* ---------- buttons ---------- */
 .btn {
     display: inline-flex;
     align-items: center;
-    height: 36px;
-    padding: 0 18px;
-    border: 1px solid transparent;
-    border-radius: 999px;
-    font-size: 13px;
-    font-weight: 500;
+    justify-content: center;
+    border-radius: 12px;
+    font-weight: 600;
     cursor: pointer;
-    transition: opacity 0.15s, box-shadow 0.15s, border-color 0.15s;
+    transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease;
 }
 
 .btn-lg {
-    height: auto;
-    padding: 14px 28px;
+    min-height: 56px;
+    padding: 0 32px;
+    font-size: 17px;
+}
+
+.btn-sm {
+    min-height: 44px;
+    padding: 0 20px;
     font-size: 15px;
 }
 
-.btn-primary {
-    background: var(--fg);
+.btn-lime {
+    background: var(--lime);
+    color: var(--forest);
+}
+
+.btn-lime:hover {
+    background: #d6ff63;
+}
+
+.btn-ghost {
+    border: 1px solid rgba(255, 255, 255, 0.5);
     color: #ffffff;
 }
 
-.btn-primary:hover {
-    opacity: 0.88;
-    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.18);
+.btn-ghost:hover {
+    background: rgba(255, 255, 255, 0.14);
+    border-color: #ffffff;
 }
 
-.btn-outline {
-    border-color: var(--border);
-    color: var(--fg);
+/* ---------- hero ---------- */
+.hero-wrap {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: min(100svh, 980px);
+    padding: 48px 24px 0;
+    color: #ffffff;
 }
 
-.btn-outline:hover {
-    border-color: var(--fg);
+@media (min-width: 992px) {
+    .hero-wrap {
+        padding: 48px max(64px, calc((100% - 1184px) / 2)) 0;
+    }
 }
 
-/* ---------- sidebar ---------- */
-.sidebar {
-    position: fixed;
-    inset: 0 auto 0 0;
-    z-index: 40;
-    display: none;
-    width: var(--sidebar-w);
-    overflow-y: auto;
-    padding: 20px 10px 12px;
-    background: var(--card);
-    border-right: 1px solid var(--border);
+.bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    min-height: 88px;
 }
 
 .logo {
     display: block;
-    height: 28px;
+    height: 34px;
     width: auto;
 }
 
-.sidebar .logo {
-    margin: 0 10px 8px;
+.logo-sm {
+    display: block;
+    height: 26px;
+    width: auto;
 }
 
-.nav-group {
-    padding: 14px 10px 6px;
-    font-family: var(--mono);
-    font-size: 9.5px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--fg3);
-}
-
-.nav-item {
+.bar-links {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 9px 12px;
-    border-radius: 10px;
-    font-size: 13px;
-    color: var(--fg2);
-    transition: background 0.15s, color 0.15s;
-}
-
-.nav-item .icon {
-    opacity: 0.8;
-}
-
-.nav-item:hover {
-    background: var(--soft);
-    color: var(--fg);
-}
-
-.nav-item.active {
-    background: var(--soft);
-    color: var(--fg);
-    font-weight: 600;
-}
-
-.sidebar-camp {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 16px;
-    padding: 12px 10px;
-    border-top: 1px solid var(--border);
-    font-size: 12px;
-    color: var(--fg2);
-}
-
-.sidebar-camp .chevron {
-    margin-left: auto;
-    width: 14px;
-    height: 14px;
-    opacity: 0.7;
-}
-
-@media (min-width: 992px) {
-    .sidebar {
-        display: block;
-    }
-
-    .canvas {
-        margin-left: var(--sidebar-w);
-    }
-}
-
-/* ---------- layout ---------- */
-.container {
-    max-width: 1220px;
-    margin: 0 auto;
-    padding: 0 24px;
-}
-
-@media (min-width: 992px) {
-    .container {
-        padding: 0 32px;
-    }
-}
-
-/* ---------- hero ---------- */
-.hero {
-    padding: 96px 0 56px;
-}
-
-.badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 14px;
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    background: #ffffff;
-    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
-    font-size: 12.5px;
+    flex-wrap: wrap;
+    gap: 12px 28px;
+    font-size: 15px;
     font-weight: 500;
-    color: var(--fg2);
 }
 
-.badge::before {
-    content: '';
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
+.bar-links a:not(.btn) {
+    padding: 10px 0;
+}
+
+.bar-links a:not(.btn):hover {
+    color: var(--lime);
+}
+
+.lang {
+    display: flex;
+    gap: 2px;
+    padding: 3px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.14);
+}
+
+.lang button {
+    min-width: 40px;
+    min-height: 34px;
+    border: 0;
+    border-radius: 7px;
+    background: transparent;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.lang button.active {
     background: var(--lime);
-    box-shadow: 0 0 0 3px rgba(195, 248, 50, 0.35);
+    color: var(--forest);
+}
+
+.hero {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 28px;
+    max-width: 880px;
+    padding: 56px 0 48px;
 }
 
 .h1 {
-    margin-top: 24px;
-    max-width: 16ch;
-    font-size: 42px;
+    font-family: var(--display);
+    font-size: clamp(44px, 5.4vw, 76px);
+    line-height: 0.94;
     font-weight: 800;
-    line-height: 1.04;
-    letter-spacing: -0.035em;
+    letter-spacing: -0.045em;
 }
 
-@media (min-width: 992px) {
-    .h1 {
-        font-size: 64px;
-    }
-}
-
-.accent {
-    /* Lime marker under the second half of the headline. */
-    background: linear-gradient(transparent 62%, var(--lime) 62%, var(--lime) 92%, transparent 92%);
+.h1-line {
+    display: block;
 }
 
 .lead {
-    margin-top: 24px;
-    max-width: 56ch;
-    font-size: 18px;
-    line-height: 1.6;
-    color: var(--fg2);
+    max-width: 52ch;
+    font-size: clamp(18px, 1.6vw, 22px);
+    line-height: 1.55;
+    color: #e3ece7;
 }
 
 .actions {
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
     gap: 12px;
-    margin-top: 36px;
 }
 
-.actions.center {
-    justify-content: center;
-}
-
-/* ---------- KPI row ---------- */
-.kpis {
+/* What the product covers, as glass along the bottom of the photo. */
+.strip {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 14px;
-}
-
-@media (min-width: 576px) {
-    .kpis {
-        grid-template-columns: repeat(3, 1fr);
-    }
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-bottom: 40px;
+    background: rgba(11, 15, 15, 0.5);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 20px;
+    overflow: hidden;
 }
 
 @media (min-width: 992px) {
-    .kpis {
-        grid-template-columns: repeat(6, 1fr);
+    .strip {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
     }
 }
 
-.kpi {
-    padding: 20px;
-    border: 1px solid var(--border);
-    border-radius: 18px;
-    background: var(--card);
-    box-shadow: var(--shadow);
+.strip-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 26px 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
 }
 
-.kpi.selected {
-    border-color: var(--fg);
+.strip-item:nth-child(-n + 2) {
+    border-top: 0;
 }
 
-.kpi-title {
-    font-size: 12px;
-    color: var(--fg2);
+.strip-item:nth-child(even) {
+    border-left: 1px solid rgba(255, 255, 255, 0.14);
 }
 
-.kpi-value {
-    margin-top: 6px;
-    font-size: 30px;
+.strip-item:last-child {
+    grid-column: 1 / -1;
+    border-left: 0;
+}
+
+@media (min-width: 992px) {
+    .strip-item {
+        border-top: 0;
+    }
+
+    .strip-item:last-child {
+        grid-column: auto;
+    }
+
+    .strip-item + .strip-item,
+    .strip-item:nth-child(even) {
+        border-left: 1px solid rgba(255, 255, 255, 0.14);
+    }
+}
+
+.strip-icon {
+    width: 26px;
+    height: 26px;
+    flex: none;
+    fill: none;
+    stroke: var(--lime);
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.strip-name {
+    font-family: var(--display);
+    font-size: 19px;
+    line-height: 1.15;
     font-weight: 700;
     letter-spacing: -0.02em;
-    font-variant-numeric: tabular-nums;
 }
 
-.kpi-sub {
-    margin-top: 2px;
+/* One page-load moment: the hero text and the strip rise in once. */
+@keyframes rise {
+    from {
+        opacity: 0;
+        transform: translateY(18px);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+.rise {
+    animation: rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.lead.rise {
+    animation-delay: 0.08s;
+}
+
+.actions.rise {
+    animation-delay: 0.16s;
+}
+
+.strip.rise {
+    animation-delay: 0.3s;
+}
+
+/* ---------- the three pages ---------- */
+.features {
+    padding-top: 112px;
+    padding-bottom: 112px;
+}
+
+.h2 {
+    max-width: 18ch;
+    font-family: var(--display);
+    font-size: clamp(34px, 4.6vw, 60px);
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+}
+
+/* The first page section follows the hero directly. */
+.page-first {
+    padding-top: 112px;
+}
+
+/* One section per page: a centred title and line, then the app's page in a soft frame. Light, dark, light, dark down the page. */
+.page-section {
+    padding: 112px 0 120px;
+    background: var(--bg);
+}
+
+.page-first {
+    padding-top: 128px;
+}
+
+/* Two close dark tones in turn, so the sections still read as separate parts. */
+.page-alt {
+    background: var(--bg-2);
+}
+
+/* Soft lime strokes on a dark section, tilted like the marker stroke through the titles. Each section has its own set (position, length, thickness, tilt and softness are set in index.html). They sit behind everything. */
+.page-strokes {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+}
+
+.strokes {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.strokes span {
+    position: absolute;
+    border-radius: 999px;
+}
+
+@media (max-width: 700px) {
+    .strokes span {
+        opacity: 0.6;
+    }
+}
+
+/* A light section, the same pale background and dark text as the one after the hero. */
+.page-light {
+    background: #f3f6f2;
+    color: #10201a;
+}
+
+.page-light .page-text p {
+    color: #4f6158;
+}
+
+.page-text {
+    margin-bottom: 64px;
+    text-align: center;
+}
+
+.wrap-wide {
+    max-width: 1312px;
+}
+
+.page-text h3 {
+    font-family: var(--display);
+    font-size: clamp(34px, 4vw, 56px);
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+}
+
+/* A green stroke through the lower part of the first words of a title, like a marker pen: it goes a little past the word on both sides. */
+.mark {
+    --mark: #c3f832;
+    position: relative;
+    z-index: 0;
+    display: inline-block;
+}
+
+/* A black copy of the word, cut to the same tilted strip as the stroke, so the part of the letters on the lime is black. */
+.mark::before {
+    content: attr(data-text) / '';
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    white-space: nowrap;
+    color: #0b0f0f;
+    pointer-events: none;
+    clip-path: polygon(-12% calc(100% - 0.33em), 112% calc(100% - 0.43em), 112% calc(100% - 0.09em), -12% calc(100% + 0.01em));
+}
+
+/* A title marked "full" (Rezervacije): the lime covers the whole word and the letters are black all the way. */
+[data-mark-full] .mark {
+    color: #0b0f0f;
+}
+
+[data-mark-full] .mark::before {
+    display: none;
+}
+
+[data-mark-full] .mark::after {
+    left: -0.14em;
+    right: -0.14em;
+    top: 0.02em;
+    bottom: -0.02em;
+    height: auto;
+    border-radius: 0.1em;
+    transform: rotate(-1deg);
+}
+
+.mark::after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    left: -0.1em;
+    right: -0.1em;
+    bottom: 0.04em;
+    height: 0.34em;
+    background: var(--mark);
+    border-radius: 0.06em;
+    transform: rotate(-1.2deg);
+}
+
+.page-text p {
+    margin: 16px auto 0;
+    max-width: 52ch;
+    font-size: 20px;
+    line-height: 1.55;
+    color: var(--stone);
+}
+
+/* The app copy is drawn at a fixed width and scaled down to fit the half, so it looks the way the app does. script.js sets the
+   scale, the width it is drawn at and the height it is cut at. */
+.shot {
+    /* PrimeNG's palette colours the app's charts and chips use. */
+    --p-cyan-500: #06b6d4;
+    --p-orange-500: #f97316;
+    --p-yellow-500: #eab308;
+    --p-yellow-600: #ca8a04;
+    --p-green-600: #16a34a;
+    --p-purple-400: #c084fc;
+    --p-purple-500: #a855f7;
+    --p-green-500: #22c55e;
+    --p-pink-500: #ec4899;
+    --p-red-500: #ef4444;
+    --p-blue-500: #3b82f6;
+    --p-teal-500: #14b8a6;
+    --p-indigo-500: #6366f1;
+    --p-lime-500: #84cc16;
+    position: relative;
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 16px;
+    background: #161a1a;
+    pointer-events: none;
+    user-select: none;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 14px;
+    line-height: normal;
+    color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3), 0 16px 32px rgba(0, 0, 0, 0.35), 0 48px 96px rgba(0, 0, 0, 0.4);
+}
+
+.shot.cut {
+    -webkit-mask-image: linear-gradient(180deg, #000 88%, transparent 100%);
+    mask-image: linear-gradient(180deg, #000 88%, transparent 100%);
+}
+
+/* Space between the edge of the Reservations picture and the table inside it. */
+.shot[data-pic='res'] .guide-pic-frame,
+.shot[data-pic='daily'] .guide-pic-frame,
+.shot[data-pic='stats'] .statistics-page {
+    box-sizing: border-box;
+    padding: 36px;
+}
+
+/* The app's pictures fill the whole box (some of them shrink to their content otherwise). */
+.shot .guide-pic-frame {
+    width: 100%;
+    max-width: none;
+    box-sizing: border-box;
+}
+
+/* The app's table has a fixed width per day and scrolls sideways; here the days share the width so all of them show. */
+.shot[data-pic='res'] .guide-pic-reservations-page .reservations-container .table-container .reservation-table {
+    width: 100%;
+}
+
+.shot[data-pic='res'] .guide-pic-reservations-page .reservations-container .table-container .reservation-table th:not(.house-header):not(.row-header),
+.shot[data-pic='res'] .guide-pic-reservations-page .reservations-container .table-container .reservation-table td {
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+}
+
+/* The Daily Sheet's three columns, not as tall as the app's fixed 1000 px. */
+.shot[data-pic='daily'] .guide-pic-daily-sheet-page .container-fluid {
+    height: 780px;
+}
+
+/* The Reservations table sits straight on the page, with no grey container around it. */
+.shot[data-pic='res'] {
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.shot[data-pic='res'] .guide-pic-frame {
+    background: transparent;
+    border: 0;
+    padding: 0;
+}
+
+/* The Statistics page sits straight on the page too, with no grey container around it. */
+.shot[data-pic='stats'],
+:is(.shot[data-pic='home'], .shot[data-pic='automation']) {
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.shot[data-pic='stats'] .guide-pic-frame,
+:is(.shot[data-pic='home'], .shot[data-pic='automation']) .guide-pic-frame {
+    background: transparent;
+    border: 0;
+    padding: 0;
+}
+
+.shot[data-pic='stats'] .statistics-page {
+    padding: 0;
+}
+
+/* The Home picture uses the app's shared card, pill and button styles (the app has them in its global styles, so the pictures do not carry them). */
+:is(.shot[data-pic='home'], .shot[data-pic='automation']) .table-card {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    background: var(--surface-1);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+}
+
+:is(.shot[data-pic='home'], .shot[data-pic='automation']) .table-card-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+    min-height: 3.25rem;
+    padding: 0.5rem 0.75rem 0.5rem 1.25rem;
+    border-bottom: 1px solid var(--hairline);
+    background: var(--surface-1);
+}
+
+:is(.shot[data-pic='home'], .shot[data-pic='automation']) .table-card-bar .table-card-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-strong);
+}
+
+:is(.shot[data-pic='home'], .shot[data-pic='automation']) .table-card-bar .table-card-title i {
+    font-size: 0.9rem;
+    color: var(--text-soft);
+}
+
+:is(.shot[data-pic='home'], .shot[data-pic='automation']) .accent-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.15rem 0.55rem;
+    border-radius: 8px;
+    border: 1px solid var(--hairline);
+    background: transparent;
+    color: var(--text-muted);
     font-size: 11px;
-    color: var(--fg3);
+    font-weight: 600;
+    white-space: nowrap;
 }
 
-/* ---------- sections ---------- */
-.section {
-    padding: 96px 0;
+:is(.shot[data-pic='home'], .shot[data-pic='automation']) .filter-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    height: 2rem;
+    padding: 0 0.75rem;
+    border-radius: 8px;
+    border: 1px solid var(--hairline);
+    background: var(--surface-1);
+    color: var(--text-muted);
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+    box-shadow: var(--shadow-sm);
 }
 
-.section-last {
-    padding-top: 0;
+:is(.shot[data-pic='home'], .shot[data-pic='automation']) .filter-pill.icon-only {
+    width: 2rem;
+    padding: 0;
+    justify-content: center;
 }
 
-.section-head {
-    max-width: 60ch;
+:is(.shot[data-pic='home'], .shot[data-pic='automation']) .icon-btn {
+    width: 2.25rem;
+    height: 2.25rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: none;
+    background: none;
+    border-radius: 8px;
+    color: var(--text-muted);
 }
 
-.section-head.center {
+:is(.shot[data-pic='home'], .shot[data-pic='automation']) .icon-btn i {
+    font-size: 16px;
+}
+
+:is(.shot[data-pic='home'], .shot[data-pic='automation']) .tool-divider {
+    width: 0;
+    height: 1.35rem;
+    margin: 0 2px;
+    border-left: 1px solid var(--hairline);
+}
+
+/* Tall enough for the Create reservation window to open over the table. */
+.shot[data-pic='res'] .guide-pic-frame {
+    min-height: 780px;
+}
+
+/* The whole page is in the app's dark mode (html has the class app-dark, which the app's own dark rules in the pictures key off). These
+   are the app's dark values (src/assets/layout/variables/_dark.scss and the dark side of the PrimeNG preset). */
+:root.app-dark {
+    --canvas: #161a1a;
+    --surface-ground: #161a1a;
+    --surface-1: #1b2020;
+    --surface-2: #212727;
+    --surface-3: #292f2f;
+    --table-chrome-bg: #232929;
+    --text-strong: #e0e0e0;
+    --text-muted: #b3b3b3;
+    --text-soft: #999999;
+    --hairline: #363b3b;
+    --border-strong: #4a4a4a;
+    --shadow-card: none;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 4px 8px -2px rgba(0, 0, 0, 0.3);
+    --accent: #c3f832;
+    --accent-hover-solid: #d2fb5e;
+    --accent-text: #c3f832;
+    --accent-soft: color-mix(in srgb, #c3f832 10%, transparent);
+    --filter-pill-bg: color-mix(in srgb, #c3f832 10%, #161a1a);
+    --accent-soft-hover: color-mix(in srgb, #c3f832 18%, transparent);
+    --accent-border: color-mix(in srgb, #c3f832 22%, transparent);
+    --filter-control-bg: transparent;
+    --filter-control-text: #c3f832;
+    --accent-ring: #c3f832;
+    --state-success: #389f6f;
+    --state-warning: #ffd466;
+    --state-danger: #ef4872;
+    --state-info: #108cb1;
+    --success-row-bg: #122b1b;
+    --loss-row-bg: #321515;
+    --warning-row-bg: #2d2a0f;
+    --text-color: #ffffff;
+    --text-color-secondary: #b3b3b3;
+    --surface-border: #2c3030;
+    --surface-card: #0f1414;
+    --surface-hover: #141a1a;
+    --primary-color: #c3f832;
+    --p-primary-color: #c3f832;
+    --p-primary-contrast-color: #0b0f0f;
+}
+
+.shot-inner {
+    position: relative;
+    transform-origin: top left;
+}
+
+/* The tutorial cursor and the card it carries. */
+.demo-cursor {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 60;
+    pointer-events: none;
+    transition: transform 1s cubic-bezier(0.45, 0, 0.2, 1);
+    will-change: transform;
+    filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.3));
+}
+
+.demo-cursor svg {
+    display: block;
+    transition: transform 0.15s ease;
+}
+
+.demo-cursor.down svg {
+    transform: scale(0.86);
+}
+
+.demo-modal {
+    position: absolute;
+    inset: 0;
+    z-index: 55;
+    box-sizing: border-box;
+    padding: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Behind the open window the table itself is blurred and dimmed (see .demo-blur). There is no layer over it, so no edge shows. */
+.demo-modal-mask {
+    display: none;
+}
+
+.shot[data-pic='res'] .reservations-container {
+    transition: filter 0.45s ease;
+}
+
+.shot[data-pic='res'] .reservations-container.demo-blur {
+    filter: blur(7px) brightness(0.62);
+}
+
+/* Not clipped, so the blurred edge of the table fades out into the page. */
+.shot[data-pic='res'] {
+    overflow: visible;
+}
+
+.demo-modal-box {
+    position: relative;
+    /* A smaller window, so it does not cover the whole table. */
+    zoom: 0.78;
+    max-width: 100%;
+    max-height: 100%;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.demo-modal.open .demo-modal-box {
+    opacity: 1;
+    transform: none;
+}
+
+.demo-focus {
+    border-color: #111827 !important;
+    box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.14) !important;
+}
+
+.demo-pressed {
+    transform: scale(0.95);
+    filter: brightness(0.92);
+    transition: transform 0.12s ease, filter 0.12s ease;
+}
+
+/* ---------- tasks, notifications, more camps ---------- */
+.more {
+    background: #f3f6f2;
+    color: #10201a;
+}
+
+.more-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 1240px;
+    margin: 0 auto;
+}
+
+@media (min-width: 992px) {
+    .more-row {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+
+.more-item {
+    padding: 56px 24px;
+}
+
+.more-item + .more-item {
+    border-top: 1px solid rgba(16, 32, 26, 0.14);
+}
+
+@media (min-width: 992px) {
+    .more-item {
+        padding: 88px 36px;
+    }
+
+    .more-item + .more-item {
+        border-top: 0;
+        border-left: 1px solid rgba(16, 32, 26, 0.14);
+    }
+}
+
+/* On the pale band the icon sits in a lime tile, with a dark line: lime lines alone would not show. */
+.more-icon {
+    box-sizing: border-box;
+    width: 56px;
+    height: 56px;
+    padding: 14px;
+    background: var(--lime);
+    border-radius: 16px;
+    fill: none;
+    stroke: #10201a;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.more-title {
+    margin-top: 28px;
+    font-family: var(--display);
+    font-size: 32px;
+    line-height: 1.05;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+}
+
+.more-item p {
+    margin-top: 12px;
+    max-width: 34ch;
+    color: #4f6158;
+}
+
+/* ---------- plans ---------- */
+.plans {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+    width: 100%;
+    margin-top: 0;
+    text-align: left;
+}
+
+@media (min-width: 800px) {
+    .plans {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+.plan {
+    display: flex;
+    flex-direction: column;
+    padding: 36px;
+    border-radius: 24px;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+}
+
+.plan-name {
+    margin: 0;
+    font-family: var(--display);
+    font-size: 28px;
+    line-height: 1;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+}
+
+.plan-price {
+    margin: 14px 0 0;
+    font-family: var(--display);
+    font-size: 44px;
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+}
+
+.plan-plus {
+    margin: 24px 0 0;
+    font-weight: 600;
+}
+
+.plan-list {
+    flex: 1;
+    margin: 20px 0 32px;
+    padding: 0;
+    list-style: none;
+}
+
+.plan-list li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 9px 0;
+    font-size: 17px;
+}
+
+/* A small tick before each page. */
+.plan-list li::before {
+    content: '';
+    flex: none;
+    width: 18px;
+    height: 18px;
+    background: var(--lime);
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 12.5l5 5L20 6.5'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 12.5l5 5L20 6.5'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.plan .btn {
+    width: 100%;
+}
+
+/* Premium is the same grey as Standard: only its name and its button are lime. */
+.plan-premium .plan-name {
+    color: var(--lime);
+}
+
+/* The free months are part of the pricing, so they are a lime tag that belongs to the cards below, not another grey line under the title. */
+.plans-note {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 0;
+    padding: 10px 22px;
+    border: 1px solid rgba(34, 211, 238, 0.55);
+    border-radius: 999px;
+    background: rgba(34, 211, 238, 0.1);
+    font-size: 17px;
+    font-weight: 600;
+    color: #22d3ee;
+}
+
+.plans-note::before {
+    content: '';
+    flex: none;
+    width: 18px;
+    height: 18px;
+    background: #22d3ee;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 12.5l5 5L20 6.5'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 12.5l5 5L20 6.5'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+/* ---------- call to action ---------- */
+.cta-wrap {
+    padding-top: 112px;
+    padding-bottom: 112px;
+}
+
+.cta {
+    /* No coloured block: the text itself is lime, straight on the dark page. */
+    padding: 64px 28px;
+    color: #ffffff;
+}
+
+@media (min-width: 992px) {
+    .cta {
+        padding: 96px 72px;
+        text-align: center;
+    }
+}
+
+.cta-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    max-width: 880px;
     margin: 0 auto;
     text-align: center;
 }
 
-.eyebrow {
-    font-family: var(--mono);
-    font-size: 10.5px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--fg3);
-}
-
-.h2 {
-    margin-top: 14px;
-    font-size: 32px;
+.cta-title {
+    font-family: var(--display);
+    font-size: clamp(38px, 5.4vw, 76px);
+    line-height: 0.96;
     font-weight: 800;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.045em;
+    color: var(--lime);
 }
 
-@media (min-width: 992px) {
-    .h2 {
-        font-size: 44px;
-    }
+.cta-text {
+    font-size: 20px;
+    color: var(--stone);
 }
 
-.section-text {
-    margin-top: 12px;
-    font-size: 15.5px;
-    line-height: 1.6;
-    color: var(--fg2);
+.cta .actions {
+    justify-content: center;
+    margin-top: 24px;
 }
 
-/* ---------- cards ---------- */
-.grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 16px;
-    margin-top: 40px;
+.btn-dark {
+    background: var(--forest);
+    color: #ffffff;
 }
 
-@media (min-width: 576px) {
-    .grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
+.btn-dark:hover {
+    background: var(--forest-2);
 }
 
-@media (min-width: 992px) {
-
-    .features {
-        grid-template-columns: repeat(3, 1fr);
-    }
+.btn-line {
+    border: 1.5px solid var(--forest);
+    color: var(--forest);
 }
 
-.card {
-    padding: 26px;
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    background: var(--card);
-    box-shadow: var(--shadow);
-    transition: box-shadow 0.2s, transform 0.2s;
-}
-
-.card:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-hover);
-}
-
-.card-title {
-    font-size: 17px;
-    font-weight: 700;
-    letter-spacing: -0.01em;
-}
-
-.card-text {
-    margin-top: 8px;
-    font-size: 14.5px;
-    line-height: 1.55;
-    color: var(--fg2);
-}
-
-.feature-icon {
-    display: grid;
-    place-items: center;
-    width: 44px;
-    height: 44px;
-    margin-bottom: 18px;
-    border-radius: 14px;
-    background: var(--lime);
-    color: #111827;
-}
-
-.feature-icon .icon {
-    width: 20px;
-    height: 20px;
-}
-
-/* ---------- call to action ---------- */
-.cta {
-    padding: 72px 32px;
-    text-align: center;
-    border: 1px solid var(--border);
-    border-radius: 28px;
-    box-shadow: var(--shadow);
-    background: radial-gradient(70% 120% at 50% 0%, rgba(195, 248, 50, 0.18), transparent 62%), #ffffff;
-}
-
-.cta .section-text {
-    max-width: 52ch;
-    margin: 16px auto 0;
+.btn-line:hover {
+    background: rgba(11, 15, 15, 0.08);
 }
 
 /* ---------- footer ---------- */
 .footer {
-    padding: 56px 0 40px;
-    border-top: 1px solid var(--border);
+    background: var(--bg-2);
+    border-top: 1px solid var(--line);
+    padding: 40px 0 56px;
+    font-size: 15px;
+    color: var(--stone);
 }
 
-.footer-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 32px;
+.footer-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 24px;
 }
 
-@media (min-width: 576px) {
-    .footer-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
+.footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
 }
 
-@media (min-width: 992px) {
-    .footer-grid {
-        grid-template-columns: 2fr 1fr 1fr;
-    }
+.footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px 28px;
 }
 
-.footer-blurb {
-    margin-top: 12px;
-    max-width: 32ch;
-    font-size: 12.5px;
-    color: var(--fg3);
-}
-
-.footer-title {
-    margin-bottom: 14px;
-    font-family: var(--mono);
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: 0.13em;
-    text-transform: uppercase;
-    color: var(--fg3);
-}
-
-.footer-link {
-    display: block;
-    margin-bottom: 10px;
-    font-size: 13.5px;
-    color: var(--fg2);
-}
-
-.footer-link:hover {
-    color: var(--fg);
-}
-
-.footer-bottom {
-    margin-top: 36px;
-    padding-top: 20px;
-    border-top: 1px solid var(--border);
-    font-family: var(--mono);
-    font-size: 11.5px;
-    color: var(--fg3);
+.footer-links a:hover {
+    color: var(--ink);
+    text-decoration: underline;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -539,255 +1102,1611 @@ button {
         scroll-behavior: auto;
     }
 
-    .card {
+    .rise {
+        animation: none;
+    }
+
+    .btn {
         transition: none;
     }
 }
 
-/* ---------- houses widget (copy of the Home page's houses widget, light mode) ---------- */
-.hw-section {
-    margin-top: 14px;
+/* The Daily Sheet on a laptop, and the team's page on a phone laid over its lower right corner. Both are drawn in CSS: no picture, no logo. */
+.duo {
+    position: relative;
 }
 
-.hw-card {
-    /* The app's light values (assets/layout/variables/_common.scss). */
-    --hw-surface: #ffffff;
-    --hw-surface-2: #f4f7f6;
-    --hw-hairline: #e2e8e6;
-    --hw-text-strong: #1e293b;
-    --hw-text-muted: #4b5563;
-    --hw-text-soft: #6b7280;
-    --hw-accent: #111827;
-
+.monitor {
     display: flex;
     flex-direction: column;
-    background: var(--hw-surface);
-    border: 1px solid var(--hw-hairline);
-    border-radius: 12px;
-    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.025);
+    align-items: center;
+}
+
+.monitor-screen {
+    position: relative;
+    width: 100%;
+    padding: 20px 12px 12px;
+    background: #090c0c;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3), 0 24px 48px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* The camera dot in the top edge of the lid. */
+.monitor-screen::before {
+    content: '';
+    position: absolute;
+    top: 7px;
+    left: 50%;
+    width: 6px;
+    height: 6px;
+    transform: translateX(-50%);
+    background: #232a2a;
+    border-radius: 50%;
+}
+
+.monitor-screen .shot {
+    border: 0;
+    border-radius: 8px;
+    box-shadow: none;
+}
+
+/* The laptop's flat base: wider than the screen, with the small notch where you lift the lid. */
+.monitor-base {
+    position: relative;
+    width: calc(100% + 56px);
+    height: 16px;
+    background: linear-gradient(180deg, #2f3636, #181c1c);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 2px 2px 20px 20px;
+    box-shadow: 0 18px 30px rgba(0, 0, 0, 0.45);
+}
+
+.monitor-base::after {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 50%;
+    width: 130px;
+    height: 6px;
+    transform: translateX(-50%);
+    background: #0d1010;
+    border-radius: 0 0 8px 8px;
+}
+
+.phone {
+    position: relative;
+    width: 330px;
+    max-width: 100%;
+    margin: 40px auto 0;
+    padding: 11px;
+    background: #090c0c;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 46px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3), 0 30px 60px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(195, 248, 50, 0.1);
+}
+
+/* The camera cut-out, and the side buttons. */
+.phone::before {
+    content: '';
+    position: absolute;
+    top: 21px;
+    left: 50%;
+    z-index: 5;
+    width: 86px;
+    height: 24px;
+    transform: translateX(-50%);
+    background: #000000;
+    border-radius: 14px;
+}
+
+.phone::after {
+    content: '';
+    position: absolute;
+    right: -4px;
+    top: 130px;
+    width: 3px;
+    height: 70px;
+    background: #2a3030;
+    border-radius: 0 3px 3px 0;
+}
+
+.phone-screen {
+    min-height: 640px;
+    padding-top: 52px;
+    background: #161a1a;
+    border-radius: 36px;
     overflow: hidden;
 }
 
-.hw-bar {
+.phone-screen .shot {
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    background: transparent;
+}
+
+.phone .guide-pic-frame {
+    padding: 14px;
+}
+
+/* The app's task cards are drawn 400 px wide; on a phone they take the width they have. */
+.phone .guide-pic-teams-detail .task-card {
+    width: 100%;
+}
+
+@media (min-width: 992px) {
+    .duo {
+        padding-bottom: 130px;
+    }
+
+    .phone {
+        position: absolute;
+        right: -8px;
+        bottom: 0;
+        margin: 0;
+    }
+}
+
+/* Only the team itself in the small page: no task-type bar and no Back row, so it stays short enough to sit over the corner. */
+.shot-team .legend-container,
+.shot-team .back-row {
+    display: none;
+}
+
+/* The headline and the chart share one row, tops level. The row is centred in the photo, so they stay level whatever the screen height.
+   The chart only shows on wide screens, where there is room beside the headline. */
+.hero-row {
+    flex: 1;
     display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    min-height: 3.25rem;
-    padding: 0.5rem 0.75rem 0.5rem 1.25rem;
-    border-bottom: 1px solid var(--hw-hairline);
-    background: var(--hw-surface);
+    flex-direction: column;
+    justify-content: center;
+    padding: 56px 0 48px;
 }
 
-.hw-title {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.45rem;
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--hw-text-strong);
+.hero-cols {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 40px;
 }
 
-.hw-title .icon {
-    width: 14px;
-    height: 14px;
-    color: var(--hw-text-soft);
+.hero-cols .hero {
+    flex: 0 1 760px;
+    padding: 0;
 }
 
-.hw-pill {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.15rem 0.55rem;
-    border-radius: 8px;
-    border: 1px solid var(--hw-hairline);
-    background: var(--hw-surface);
-    color: var(--hw-accent);
-    font-size: 11px;
-    font-weight: 600;
+
+/* ---------- after the hero: a light section ---------- */
+.intro {
+    padding: 112px 0 120px;
+    background: #f3f6f2;
+    color: #10201a;
+}
+
+.intro-top {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 40px;
+}
+
+@media (min-width: 992px) {
+    .intro-top {
+        grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+        gap: 90px;
+    }
+}
+
+.intro-title {
+    font-family: var(--display);
+    font-size: clamp(44px, 5.2vw, 68px);
+    line-height: 0.98;
+    font-weight: 800;
+    letter-spacing: -0.045em;
+    text-wrap: balance;
+}
+
+.intro-texts {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    padding-top: 10px;
+}
+
+.intro-text h3 {
+    font-family: var(--display);
+    font-size: 26px;
+    line-height: 1.1;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+}
+
+.intro-text p {
+    margin-top: 6px;
+    max-width: 44ch;
+    font-size: 17px;
+    line-height: 1.5;
+    color: #4f6158;
+}
+
+.intro-numbers {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 48px 40px;
+    margin-top: 80px;
+}
+
+@media (min-width: 992px) {
+    .intro-numbers {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+
+.intro-figure {
+    display: inline-block;
+    padding-bottom: 6px;
+    border-bottom: 10px solid var(--lime);
+    font-family: var(--display);
+    font-size: clamp(88px, 8vw, 110px);
+    line-height: 0.9;
+    font-weight: 800;
+    letter-spacing: -0.05em;
     font-variant-numeric: tabular-nums;
 }
 
-.hw-controls {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-left: auto;
+.intro-label {
+    display: block;
+    margin-top: 14px;
+    font-size: 18px;
+    font-weight: 600;
 }
 
-.hw-sort {
+/* A smaller grey line under each label, with the detail behind the number. */
+.intro-info {
+    display: block;
+    margin-top: 6px;
+    max-width: 26ch;
+    font-size: 15px;
+    line-height: 1.45;
+    color: #4f6158;
+}
+
+/* The Automation picture: the app's PrimeNG controls (toggle, checkbox, dropdown, number box) are drawn here by hand, because the landing page does not load PrimeNG. */
+.shot[data-pic='automation'] .p-toggleswitch {
+    position: relative;
+    flex: none;
+    width: 40px;
+    height: 22px;
+}
+.shot[data-pic='automation'] .p-toggleswitch-slider {
+    position: absolute;
+    inset: 0;
+    border-radius: 999px;
+    background: #4a5552;
+}
+.shot[data-pic='automation'] .p-toggleswitch-handle {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #ffffff;
+}
+.shot[data-pic='automation'] .p-toggleswitch-checked .p-toggleswitch-slider {
+    background: var(--lime);
+}
+.shot[data-pic='automation'] .p-toggleswitch-checked .p-toggleswitch-handle {
+    left: 21px;
+    background: #10201a;
+}
+.shot[data-pic='automation'] .p-checkbox {
+    flex: none;
+    width: 20px;
+    height: 20px;
+}
+.shot[data-pic='automation'] .p-checkbox-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    box-sizing: border-box;
+    border: 1.5px solid rgba(255, 255, 255, 0.35);
+    border-radius: 5px;
+}
+.shot[data-pic='automation'] .p-checkbox-checked .p-checkbox-box {
+    border-color: var(--lime);
+    background: var(--lime);
+    color: #10201a;
+}
+.shot[data-pic='automation'] .p-checkbox-icon {
+    font-size: 11px;
+    font-weight: 700;
+}
+.shot[data-pic='automation'] .p-select {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+    height: 38px;
+    padding: 0 12px;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.04);
+}
+.shot[data-pic='automation'] .p-select-dropdown {
+    font-size: 11px;
+    opacity: 0.7;
+}
+.shot[data-pic='automation'] .p-inputnumber {
+    display: inline-flex;
+    height: 38px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 8px;
+    overflow: hidden;
+}
+.shot[data-pic='automation'] .p-inputnumber-input {
+    border: 0;
+    background: transparent;
+    color: inherit;
+    padding: 0 10px;
+}
+.shot[data-pic='automation'] .p-disabled {
+    opacity: 0.5;
+}
+.shot[data-pic='automation'] .cleanup-row-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.shot[data-pic='automation'] .checkbox-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    padding: 6px 0 18px;
+}
+.shot[data-pic='automation'] .run-at-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 0 8px;
+}
+.shot[data-pic='automation'] .generation-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 48px;
+}
+.shot[data-pic='automation'] .task-generation-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 18px 0 8px;
+    font-size: 20px;
+    font-weight: 600;
+}
+.shot[data-pic='automation'] .card-body {
+    padding: 8px 28px 16px;
+}
+.shot[data-pic='automation'] .task-generation-subdivider {
+    border: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    margin: 0;
+}
+.shot[data-pic='automation'] .p-select {
+    min-width: 96px;
+    gap: 14px;
+}
+.shot[data-pic='automation'] .p-select-label {
+    flex: none;
+    overflow: visible;
+}
+.shot[data-pic='automation'] .p-toggleswitch-handle {
+    top: 3px;
+}
+.shot[data-pic='automation'] .generation-section {
+    padding: 0 0 8px;
+}
+.shot[data-pic='automation'] .card-body {
+    border: 0;
+}
+.shot[data-pic='automation'] .card-body::after,
+.shot[data-pic='automation'] .card-body::before {
+    display: none;
+}
+.shot[data-pic='automation'] .card-footer {
+    display: none;
+}
+.shot[data-pic='automation'] .p-toggleswitch-handle {
+    top: 50%;
+    transform: translateY(-50%);
+}
+.shot[data-pic='automation'] .generation-grid {
+    padding-bottom: 12px;
+}
+.shot[data-pic='automation'] .p-toggleswitch {
+    height: 24px !important;
+    width: 44px !important;
+}
+.shot[data-pic='automation'] .p-toggleswitch-slider {
+    height: 24px !important;
+    width: 44px !important;
+    top: 0 !important;
+    left: 0 !important;
+}
+.shot[data-pic='automation'] .p-toggleswitch-handle {
+    top: 4px !important;
+    left: 4px !important;
+    transform: none !important;
+    width: 16px !important;
+    height: 16px !important;
+}
+.shot[data-pic='automation'] .p-toggleswitch-checked .p-toggleswitch-handle {
+    left: 24px !important;
+}
+
+/* Light sections: white page, and the app's own light-mode values for the pictures inside. */
+.page-light.page-white {
+    background: #ffffff;
+}
+
+.page-light .shot[data-pic='automation'],
+.page-light .shot[data-pic='home'] {
+    --canvas: #dce1e0;
+    --surface-ground: #dce1e0;
+    --surface-1: #eaeeed;
+    --surface-2: #e0e5e4;
+    --surface-3: #d5dbda;
+    --table-chrome-bg: #eaeeed;
+    --text-strong: #1e293b;
+    --text-muted: #4b5563;
+    --text-soft: #6b7280;
+    --hairline: #ccd2d1;
+    --border-strong: #c1c8c7;
+    --shadow-card: 0 1px 2px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.025);
+    --accent: #1f2937;
+    --accent-hover-solid: #1f2937;
+    --accent-text: #111827;
+    --accent-soft: #dfe4e3;
+    --filter-pill-bg: #eaeeed;
+    --accent-soft-hover: #d3d9d8;
+    --accent-border: #ccd2d1;
+    --filter-control-bg: #eaeeed;
+    --filter-control-text: #111827;
+    --accent-ring: #9ca3af;
+    --state-success: #20ac6b;
+    --state-warning: #e6a800;
+    --state-danger: #e14169;
+    --state-info: #0d7ea0;
+    --text-color: #1e293b;
+    --text-color-secondary: #4b5563;
+    --surface-border: #ccd2d1;
+    --surface-card: #ffffff;
+    --surface-hover: #f1f4f3;
+    --primary-color: #1f2937;
+    color: #1e293b;
+}
+
+.page-light .shot[data-pic='home'] .house-card {
+    filter: none !important;
+}
+
+.page-light .shot[data-pic='home'] .table-card,
+.page-light .shot[data-pic='automation'] .table-card {
+    background: #ffffff;
+    border: 1px solid #ccd2d1;
+}
+
+.page-light .shot[data-pic='home'] .table-card-bar,
+.page-light .shot[data-pic='automation'] .table-card-bar {
+    background: #eaeeed;
+    border-bottom-color: #ccd2d1;
+}
+
+.page-light .shot[data-pic='automation'] .p-toggleswitch-slider {
+    background: #b8c0be;
+}
+.page-light .shot[data-pic='automation'] .p-toggleswitch-checked .p-toggleswitch-slider {
+    background: #1f2937;
+}
+.page-light .shot[data-pic='automation'] .p-toggleswitch-checked .p-toggleswitch-handle {
+    background: #ffffff;
+}
+.page-light .shot[data-pic='automation'] .p-checkbox-box {
+    border-color: #9ca3af;
+}
+.page-light .shot[data-pic='automation'] .p-checkbox-checked .p-checkbox-box {
+    border-color: #1f2937;
+    background: #1f2937;
+    color: #ffffff;
+}
+.page-light .shot[data-pic='automation'] .p-select,
+.page-light .shot[data-pic='automation'] .p-inputnumber {
+    border-color: #ccd2d1;
+    background: #f7f9f8;
+}
+.page-light .shot[data-pic='automation'] .task-generation-subdivider {
+    border-top-color: #ccd2d1;
+}
+
+/* Automation picture, tidied: smaller type, a white card with no grey bar, no stray lines, and a switch drawn in one piece. */
+.shot[data-pic='automation'] .table-card,
+.page-light .shot[data-pic='automation'] .table-card {
+    background: #ffffff;
+    border: 1px solid #dde3e1;
+    border-radius: 16px;
+    box-shadow: 0 1px 2px rgba(16, 32, 26, 0.04), 0 8px 24px rgba(16, 32, 26, 0.05);
+}
+.shot[data-pic='automation'] .table-card-bar,
+.page-light .shot[data-pic='automation'] .table-card-bar {
+    background: transparent;
+    border-bottom: 1px solid #e6ebe9;
+    padding: 18px 28px;
+}
+.shot[data-pic='automation'] .table-card-bar .table-card-title {
+    font-size: 16px;
+}
+.shot[data-pic='automation'] .card-body {
+    padding: 12px 28px 24px;
+    border: 0 !important;
+}
+.shot[data-pic='automation'] .card-body::before,
+.shot[data-pic='automation'] .card-body::after,
+.shot[data-pic='automation'] .card-footer {
+    display: none !important;
+}
+.shot[data-pic='automation'] .generation-section {
+    border: 0 !important;
+    padding: 0 0 12px !important;
+}
+.shot[data-pic='automation'] .generation-grid {
+    gap: 4px 40px;
+    border: 0 !important;
+}
+.shot[data-pic='automation'] .generation-grid > hr,
+.shot[data-pic='automation'] .card-body > hr {
+    display: none;
+}
+.shot[data-pic='automation'] .task-generation-section {
+    font-size: 17px;
+    margin: 14px 0 6px;
+}
+.shot[data-pic='automation'] .cleanup-row label,
+.shot[data-pic='automation'] .cleanup-row-controls label {
+    font-size: 15px;
+}
+.shot[data-pic='automation'] .checkbox-row {
+    gap: 10px;
+    padding: 4px 0 10px;
+}
+.shot[data-pic='automation'] .p-select,
+.shot[data-pic='automation'] .p-inputnumber {
+    height: 34px;
+    font-size: 15px;
+}
+.shot[data-pic='automation'] .p-toggleswitch {
+    position: relative !important;
+    display: inline-block !important;
+    flex: none !important;
+    box-sizing: border-box !important;
+    width: 40px !important;
+    height: 22px !important;
+    border-radius: 999px !important;
+    background: #b8c0be !important;
+    padding: 0 !important;
+}
+.shot[data-pic='automation'] .p-toggleswitch-checked {
+    background: #1f2937 !important;
+}
+.shot[data-pic='automation'] .p-toggleswitch-slider {
+    display: none !important;
+}
+.shot[data-pic='automation'] .p-toggleswitch::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #ffffff;
+}
+.shot[data-pic='automation'] .p-toggleswitch-checked::after {
+    left: 21px;
+}
+.shot[data-pic='automation'] .run-at-row {
+    padding: 14px 0 4px;
+}
+
+/* Two steps: the automation first, then what it makes on the Daily Sheet. */
+.steps {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 56px;
+}
+.step {
+    min-width: 0;
+}
+.step-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 20px;
+    color: #10201a;
+}
+.step-n {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--lime);
+    color: #10201a;
+    font-weight: 800;
+    font-size: 17px;
+}
+.step-card {
+    width: 100%;
+    max-width: 380px;
+}
+/* The small card shows two of the four task types. */
+.step-card .shot[data-pic='automation'] .generation-grid {
+    grid-template-columns: 1fr;
+}
+.step-card .shot[data-pic='automation'] .generation-section:nth-child(2),
+.step-card .shot[data-pic='automation'] .generation-section:nth-child(4) {
+    display: none;
+}
+.step-card .shot[data-pic='automation'] {
+    overflow: visible;
+}
+.step-card .shot[data-pic='automation'] .card-body {
+    padding: 8px 20px 12px;
+}
+.step-card .shot[data-pic='automation'] .table-card-bar {
+    padding: 14px 20px;
+}
+.step-card .shot[data-pic='automation'] .p-select {
+    width: 64px !important;
+    min-width: 0;
+    justify-content: center;
+    padding: 0 6px 0 10px;
+}
+.step-card .shot[data-pic='automation'] .p-select-dropdown {
+    display: none;
+}
+.step-card .shot[data-pic='automation'] .generation-section {
+    padding-bottom: 4px !important;
+}
+@media (min-width: 1100px) {
+    .steps {
+        grid-template-columns: 380px minmax(0, 1fr);
+        gap: 40px;
+        align-items: start;
+    }
+}
+
+@media (min-width: 1100px) {
+    .steps .duo {
+        padding-bottom: 70px;
+    }
+    .steps .phone {
+        width: 250px;
+        right: -8px;
+        bottom: 0;
+        padding: 9px;
+        border-radius: 38px;
+    }
+    .steps .phone::before {
+        top: 17px;
+        width: 66px;
+        height: 18px;
+    }
+    .steps .phone-screen {
+        min-height: 460px;
+        padding-top: 40px;
+        border-radius: 30px;
+    }
+}
+
+/* Bigger and further apart: this section's content is wider than the other pages, and the two steps get more air. */
+.wrap-steps {
+    max-width: 1560px;
+}
+.step-head {
+    margin-bottom: 28px;
+    font-size: 22px;
+}
+.step-card {
+    max-width: 480px;
+}
+@media (min-width: 1100px) {
+    .steps {
+        grid-template-columns: 480px minmax(0, 1fr);
+        gap: 88px;
+    }
+    .steps .duo {
+        padding-bottom: 90px;
+    }
+    .steps .phone {
+        width: 290px;
+        padding: 10px;
+        border-radius: 42px;
+    }
+    .steps .phone::before {
+        top: 19px;
+        width: 76px;
+        height: 21px;
+    }
+    .steps .phone-screen {
+        min-height: 520px;
+        padding-top: 46px;
+        border-radius: 33px;
+    }
+}
+@media (min-width: 1100px) {
+    .steps {
+        grid-template-columns: 440px minmax(0, 1fr);
+        gap: 72px;
+    }
+    .step-card {
+        max-width: 440px;
+    }
+}
+
+/* More room above and below the thin line under each task type's name. */
+.shot[data-pic='automation'] .task-generation-section {
+    margin-bottom: 0;
+    padding-bottom: 14px;
+}
+.shot[data-pic='automation'] .task-generation-subdivider {
+    margin: 0 0 16px;
+}
+
+/* A little space between the icons on a house card (the bed and the house, the wrench, the umbrella and the +3). */
+.shot[data-pic='home'] .house-card .house-icons {
+    gap: 10px;
+}
+
+/* The few parts of the copies that really work: the house search, the Statistics tabs and the Automation ticks and switch. */
+.shot[data-pic='home'] app-table-search,
+.shot[data-pic='home'] app-table-search * {
+    pointer-events: auto;
+}
+.shot[data-pic='home'] input {
+    user-select: text;
+    cursor: text;
+}
+.shot[data-pic='stats'] .tab-item {
+    pointer-events: auto;
+    cursor: pointer;
+}
+.shot[data-pic='stats'] .tab-item:focus-visible {
+    outline: 2px solid var(--lime);
+    outline-offset: 2px;
+}
+.shot[data-pic='automation'] .run-at-row,
+.shot[data-pic='automation'] .cleanup-row-controls:has(.p-checkbox) {
+    pointer-events: auto;
+    cursor: pointer;
+}
+.shot[data-pic='automation'] .p-select,
+.shot[data-pic='automation'] .p-inputnumber {
+    pointer-events: none;
+}
+.shot[data-pic='stats'] .stats-body > div,
+.shot[data-pic='stats'] .stats-body .qg-card,
+.shot[data-pic='stats'] .stats-body .gs-card,
+.shot[data-pic='stats'] .stats-body .gs-stack {
+    width: 100%;
+    max-width: none;
+    box-sizing: border-box;
+}
+.shot[data-pic='stats'] .stats-body > div + div {
+    margin-top: 16px;
+}
+
+/* Pregled toolbar: the sort box is a bordered box like the three buttons beside it (the app's .filter-select, 2rem high), and the
+   paw and the tick can be pressed. A pressed one is solid lime with near-black text, as in the app's dark mode. */
+.shot[data-pic='home'] .p-select.filter-select {
+    display: inline-flex;
+    align-items: center;
+    height: 2rem;
+    border: 1px solid var(--hairline);
+    border-radius: 8px;
+    background: var(--surface-1);
+    box-shadow: var(--shadow-sm);
+}
+
+.shot[data-pic='home'] .p-select.filter-select .p-select-label {
+    display: block;
+    padding: 0 0 0 0.75rem;
+    line-height: calc(2rem - 2px);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-strong);
+    white-space: nowrap;
+}
+
+.shot[data-pic='home'] .p-select.filter-select .p-select-label .selected-sort-option-content {
+    gap: 0.35rem;
+    height: 100%;
+}
+
+.shot[data-pic='home'] .p-select.filter-select .p-select-dropdown {
+    width: 1.85rem;
+    height: 100%;
+    color: var(--text-muted);
+}
+
+.shot[data-pic='home'] .p-select.filter-select .p-select-dropdown i {
+    font-size: 10px;
+}
+
+.shot[data-pic='home'] .filter-pill[role='button'] {
+    pointer-events: auto;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.shot[data-pic='home'] .filter-pill[role='button']:hover:not(.active) {
+    border-color: color-mix(in srgb, #c3f832 55%, var(--hairline));
+    color: var(--text-strong);
+}
+
+.shot[data-pic='home'] .sort-buttons .filter-pill.icon-only.active {
+    background: #c3f832;
+    border-color: #c3f832;
+    color: #111827;
+}
+
+.shot[data-pic='home'] .filter-pill[role='button']:focus-visible {
+    outline: 2px solid #c3f832;
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .shot[data-pic='home'] .filter-pill[role='button'] {
+        transition: none;
+    }
+}
+
+/* Pregled sort: the list under the box (the app's three choices) and the group headings (the app's .type-divider). */
+.shot[data-pic='home'] .p-select.filter-select {
+    pointer-events: auto;
+    cursor: pointer;
+    position: relative;
+}
+
+.shot[data-pic='home'] .p-select.filter-select:focus-visible {
+    outline: 2px solid #c3f832;
+    outline-offset: 2px;
+}
+
+.shot[data-pic='home'] .sort-menu {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    z-index: 20;
+    min-width: 100%;
+    padding: 4px;
+    border: 1px solid var(--hairline);
+    border-radius: 8px;
+    background: var(--surface-2);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+}
+
+.shot[data-pic='home'] .sort-menu[hidden] {
+    display: none;
+}
+
+.shot[data-pic='home'] .sort-option {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-}
-
-.hw-select,
-.hw-btn {
-    display: inline-flex;
-    align-items: center;
-    height: 2rem;
-    border-radius: 8px;
-    border: 1px solid var(--hw-hairline);
-    background: var(--hw-surface);
-    color: var(--hw-text-muted);
-    box-shadow: 0 1px 2px 0 rgba(15, 23, 42, 0.04);
-    font-size: 12px;
-    font-weight: 500;
-    white-space: nowrap;
-}
-
-.hw-select {
-    gap: 0.4rem;
-    padding: 0 0.65rem;
-}
-
-.hw-select .icon,
-.hw-btn .icon {
-    width: 14px;
-    height: 14px;
-}
-
-.hw-select .chevron {
-    width: 12px;
-    height: 12px;
-    margin-left: 0.2rem;
-}
-
-.hw-btn {
-    justify-content: center;
-    padding: 0 0.65rem;
-    cursor: pointer;
-}
-
-.hw-btn:hover {
-    background: var(--hw-surface-2);
-    color: var(--hw-text-strong);
-}
-
-.hw-search {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 2rem;
-    height: 2rem;
-    padding: 0;
+    width: 100%;
+    padding: 0.45rem 0.65rem;
     border: 0;
-    border-radius: 8px;
+    border-radius: 6px;
     background: transparent;
-    color: var(--hw-text-muted);
+    color: var(--text-strong);
+    font: inherit;
+    font-size: 12px;
+    white-space: nowrap;
+    text-align: left;
     cursor: pointer;
 }
 
-.hw-search:hover {
-    background: var(--hw-surface-2);
+.shot[data-pic='home'] .sort-option i {
+    font-size: 12px;
+    color: var(--text-muted);
 }
 
-.hw-search .icon {
-    width: 15px;
-    height: 15px;
+.shot[data-pic='home'] .sort-option:hover,
+.shot[data-pic='home'] .sort-option:focus-visible {
+    background: var(--surface-3);
+    outline: none;
 }
 
-.hw-body {
-    padding: 1rem;
+.shot[data-pic='home'] .sort-option[aria-selected='true'] {
+    background: color-mix(in srgb, #c3f832 12%, var(--surface-2));
 }
 
-.hw-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.35rem;
-    padding-bottom: 20px;
-}
-
-@media (min-width: 768px) {
-    .hw-grid {
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 0.5rem;
-    }
-}
-
-@media (min-width: 1700px) {
-    .hw-grid {
-        grid-template-columns: repeat(6, minmax(0, 1fr));
-    }
-}
-
-.hw-house {
+.shot[data-pic='home'] .type-divider {
+    grid-column: 1 / -1;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 0.75rem 1rem;
-    border-radius: 8px;
-    box-shadow: 0 1px 2px 0 rgba(15, 23, 42, 0.04);
-    color: #ffffff;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    gap: 0.5rem;
+    margin: 0.75rem 0 0.35rem;
+    padding: 0 0 0.35rem 0.1rem;
+    border-bottom: 1px solid var(--hairline);
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.shot[data-pic='home'] .type-divider:first-child {
+    margin-top: 0;
+}
+
+/* Statistika: the dropdowns work (assets/stats-demo.js). The list under a box, with a tick box on each line when several can be chosen. */
+.shot[data-pic='stats'] .p-select,
+.shot[data-pic='stats'] .p-multiselect {
+    position: relative;
+    pointer-events: auto;
     cursor: pointer;
-    transition: box-shadow 0.15s ease, filter 0.15s ease;
 }
 
-.hw-house:hover {
-    box-shadow: 0 2px 4px -1px rgba(15, 23, 42, 0.08);
-    filter: brightness(0.96);
+.shot[data-pic='stats'] .p-select:focus-visible,
+.shot[data-pic='stats'] .p-multiselect:focus-visible,
+.shot[data-pic='stats'] .swap-years:focus-visible {
+    outline: 2px solid #c3f832;
+    outline-offset: 2px;
 }
 
-.hw-available { background: #22c55e; }
-.hw-occupied { background: #dc2626; }
-.hw-arrival { background: #f87171; }
-.hw-tasks { background: #f0c000; }
-.hw-inactive { background: #6b7280; }
+.shot[data-pic='stats'] .swap-years {
+    pointer-events: auto;
+    cursor: pointer;
+}
 
-.hw-name {
-    flex: 0 1 auto;
-    min-width: 0;
+:is(.shot[data-pic='stats'], .shot[data-pic='res']) .dd-menu {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    z-index: 30;
+    min-width: 100%;
+    width: max-content;
+    max-width: 320px;
+    padding: 4px;
+    border: 1px solid var(--hairline);
+    border-radius: 8px;
+    background: var(--surface-2);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+    text-align: left;
+    font-weight: 400;
+    cursor: default;
+}
+
+:is(.shot[data-pic='stats'], .shot[data-pic='res']) .dd-menu[hidden] {
+    display: none;
+}
+
+:is(.shot[data-pic='stats'], .shot[data-pic='res']) .dd-head {
+    padding: 2px 2px 6px;
+}
+
+:is(.shot[data-pic='stats'], .shot[data-pic='res']) .dd-search {
+    width: 100%;
+    box-sizing: border-box;
+    height: 1.9rem;
+    padding: 0 0.6rem;
+    border: 1px solid var(--hairline);
+    border-radius: 6px;
+    background: var(--surface-1);
+    color: var(--text-strong);
+    font: inherit;
+    font-size: 12px;
+}
+
+:is(.shot[data-pic='stats'], .shot[data-pic='res']) .dd-search:focus-visible {
+    outline: 2px solid #c3f832;
+    outline-offset: 0;
+}
+
+:is(.shot[data-pic='stats'], .shot[data-pic='res']) .dd-list {
+    max-height: 13.5rem;
+    overflow-y: auto;
+    pointer-events: auto;
+}
+
+:is(.shot[data-pic='stats'], .shot[data-pic='res']) .dd-option {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    width: 100%;
+    padding: 0.42rem 0.6rem;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--text-strong);
+    font: inherit;
+    font-size: 12px;
+    text-align: left;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+:is(.shot[data-pic='stats'], .shot[data-pic='res']) .dd-option[hidden] {
+    display: none;
+}
+
+:is(.shot[data-pic='stats'], .shot[data-pic='res']) .dd-option:hover,
+:is(.shot[data-pic='stats'], .shot[data-pic='res']) .dd-option:focus-visible {
+    background: var(--surface-3);
+    outline: none;
+}
+
+:is(.shot[data-pic='stats'], .shot[data-pic='res']) .p-select .dd-option.on {
+    background: color-mix(in srgb, #c3f832 12%, var(--surface-2));
+}
+
+:is(.shot[data-pic='stats'], .shot[data-pic='res']) .dd-box {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    width: 15px;
+    height: 15px;
+    border: 1px solid var(--hairline);
+    border-radius: 4px;
+    background: var(--surface-1);
+}
+
+:is(.shot[data-pic='stats'], .shot[data-pic='res']) .dd-box i {
+    font-size: 9px;
+    color: #111827;
+    opacity: 0;
+}
+
+:is(.shot[data-pic='stats'], .shot[data-pic='res']) .dd-option.on .dd-box {
+    background: #c3f832;
+    border-color: #c3f832;
+}
+
+:is(.shot[data-pic='stats'], .shot[data-pic='res']) .dd-option.on .dd-box i {
+    opacity: 1;
+}
+
+.shot[data-pic='stats'] .p-multiselect-label {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    padding-right: 10px;
-    font-size: 1.5rem;
+}
+
+/* Reservations: a selection of one cell (the start is also the end) has a border all round, as in the app. */
+.guide-pic-reservations-page .reservations-container .table-container .reservation-table .selected-cell.selection-start.selection-end {
+    border: 2px solid #007bff !important;
+    border-radius: 4px;
+}
+
+/* Reservations, after the animation: free nights can be chosen and the Create reservation window works (see wireRes in script.js). */
+.shot[data-pic='res'].live .reservation-table td:not(.reserved-cell):not(.past-date) {
+    pointer-events: auto;
+    cursor: cell;
+}
+
+.shot[data-pic='res'].live .reservation-table {
+    touch-action: pan-y;
+}
+
+.demo-modal.live-modal {
+    pointer-events: auto;
+    user-select: text;
+    -webkit-user-select: text;
+}
+
+.demo-modal.live-modal .demo-modal-mask {
+    display: block;
+    position: absolute;
+    inset: 0;
+    background: transparent;
+}
+
+.demo-modal.live-modal .p-dialog-close-button,
+.demo-modal.live-modal .right-buttons .p-button {
+    cursor: pointer;
+}
+
+.demo-modal.live-modal input.p-inputtext:not(.p-datepicker-input):not(.p-inputnumber-input):focus {
+    outline: none;
+    border-color: #c3f832;
+    box-shadow: 0 0 0 3px rgba(195, 248, 50, 0.22);
+}
+
+.demo-modal.live-modal input[aria-invalid='true'] {
+    border-color: #ef4444 !important;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+}
+
+.demo-modal.live-modal .p-button[role='button']:focus-visible,
+.demo-modal.live-modal .p-dialog-close-button:focus-visible {
+    outline: 2px solid #c3f832;
+    outline-offset: 2px;
+}
+
+/* Reservations controls (house type, year, row height, export), after the animation (see wireRes in script.js). */
+.shot[data-pic='res'].live [role='button'],
+.shot[data-pic='res'].live .house-type-tabs-wrapper .p-select {
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+.shot[data-pic='res'] .house-type-tabs-wrapper .p-select {
+    position: relative;
+}
+
+.shot[data-pic='res'].live .house-type-tabs-wrapper .p-select:focus-visible,
+.shot[data-pic='res'].live [role='button']:focus-visible {
+    outline: 2px solid #c3f832;
+    outline-offset: 2px;
+}
+
+/* A year arrow at the first or last season, as in the app (a disabled button). */
+.shot[data-pic='res'] .year-nav .icon-btn.disabled {
+    opacity: 0.35;
+    cursor: default;
+    pointer-events: none;
+}
+
+/* The row heights of the three buttons (the app's own classes; the picture only had the middle one). */
+.guide-pic-reservations-page .reservations-container .table-container .reservation-table .height-25-important {
+    height: 1.75rem !important;
+}
+
+.guide-pic-reservations-page .reservations-container .table-container .reservation-table .height-40-important {
+    height: 2.875rem !important;
+}
+
+.shot[data-pic='res'] .guide-res-export {
+    position: relative;
+}
+
+.shot[data-pic='res'] .res-export-menu {
+    left: auto;
+    right: 0;
+    min-width: 8rem;
+}
+
+.shot[data-pic='res'] .res-export-menu .dd-option i {
+    font-size: 13px;
+}
+
+.shot[data-pic='res'] .res-export-menu .dd-json {
     font-weight: 700;
-}
-
-.hw-icons {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    flex: 0 0 auto;
-}
-
-.hw-icons .icon {
-    width: 25px;
-    height: 24px;
-    stroke-width: 2.4;
-}
-
-.hw-legend {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.25rem 1rem;
-    padding: 0.7rem 1rem;
-    border-top: 1px solid var(--hw-hairline);
-    background: var(--hw-surface);
-}
-
-.hw-legend-item {
-    display: flex;
-    align-items: center;
-    gap: 0.4em;
     font-size: 12px;
-    color: var(--hw-text-muted);
-    white-space: nowrap;
+    width: 13px;
+    text-align: center;
+    color: var(--p-blue-500);
 }
 
-.hw-dot {
+/* The open lists (and their search box) take mouse clicks even though the picture itself does not. */
+:is(.shot[data-pic='stats'], .shot[data-pic='res']) .dd-menu {
+    pointer-events: auto;
+}
+
+/* Reservations: a stay in the table can be clicked to open it; a button that is off (Create or Save before they can be used) looks off. */
+.shot[data-pic='res'].live .reservation-table td.reserved-cell {
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+.demo-modal.live-modal .p-button.p-disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.demo-modal.live-modal .p-dialog-footer .p-button[role='button'],
+.demo-modal.live-modal .p-dialog-close-button[role='button'] {
+    cursor: pointer;
+}
+
+/* Stay window fields: the app's pictures switch every text box off, so the working ones are switched back on here. */
+.demo-modal.live-modal input.p-inputtext,
+.demo-modal.live-modal textarea.p-inputtext {
+    pointer-events: auto;
+}
+
+.demo-modal.live-modal .p-datepicker-input {
+    cursor: pointer;
+}
+
+.demo-modal.live-modal .p-datepicker-dropdown,
+.demo-modal.live-modal .p-datepicker-input-icon-container {
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+.demo-modal.live-modal textarea.p-inputtext:focus,
+.demo-modal.live-modal .p-inputnumber-input:focus {
+    outline: none;
+    border-color: #c3f832;
+    box-shadow: 0 0 0 3px rgba(195, 248, 50, 0.22);
+}
+
+.demo-modal.live-modal .p-datepicker-input[aria-invalid='true'] {
+    border-color: #ef4444 !important;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+}
+
+.demo-modal.live-modal .pf-host {
+    position: relative;
+}
+
+.demo-modal.live-modal .pf-pop {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    z-index: 60;
+    background: #1d2321;
+    color: #e8ecea;
+    border: 1px solid #3b4440;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    padding: 10px;
+    font-size: 14px;
+    pointer-events: auto;
+}
+
+.demo-modal.live-modal .pf-cal {
+    width: 268px;
+}
+
+.demo-modal.live-modal .pf-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+
+.demo-modal.live-modal .pf-title {
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.demo-modal.live-modal .pf-nav {
+    width: 30px;
+    height: 30px;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.demo-modal.live-modal .pf-nav:hover {
+    background: #2c3532;
+}
+
+.demo-modal.live-modal .pf-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+    text-align: center;
+}
+
+.demo-modal.live-modal .pf-wd {
+    font-size: 12px;
+    color: #8d9893;
+    padding: 4px 0;
+    text-transform: capitalize;
+}
+
+.demo-modal.live-modal .pf-day {
+    height: 32px;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    font: inherit;
+}
+
+.demo-modal.live-modal .pf-day:hover {
+    background: #2c3532;
+}
+
+.demo-modal.live-modal .pf-day.other {
+    color: #5d6762;
+}
+
+.demo-modal.live-modal .pf-day.on {
+    background: #c3f832;
+    color: #111;
+    font-weight: 600;
+}
+
+.demo-modal.live-modal .pf-time {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.demo-modal.live-modal .pf-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.demo-modal.live-modal .pf-val {
+    font-size: 20px;
+    font-weight: 600;
+    min-width: 36px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+}
+
+.demo-modal.live-modal .pf-sep {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+/* The colour list of the stay window (the app's ten colours) and the colour box that opens it. */
+.demo-modal.live-modal .p-select {
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+.demo-modal.live-modal .p-select:focus-visible {
+    outline: 2px solid #c3f832;
+    outline-offset: 2px;
+}
+
+.demo-modal.live-modal .pf-colors {
+    display: grid;
+    grid-template-columns: repeat(5, 40px);
+    gap: 8px;
+}
+
+.demo-modal.live-modal .pf-sw {
+    width: 40px !important;
+    height: 28px !important;
+    padding: 0;
+    border: 2px solid transparent;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.demo-modal.live-modal .pf-sw:hover {
+    border-color: #8d9893;
+}
+
+.demo-modal.live-modal .pf-sw.on {
+    border-color: #c3f832;
+}
+
+.demo-modal.live-modal .pf-chip {
     display: inline-block;
-    width: 10px;
-    height: 10px;
-    margin-right: 0.2em;
-    border-radius: 999px;
-    border: 1px solid var(--hw-hairline);
+    width: 34px;
+    height: 18px;
+    border-radius: 4px;
+    vertical-align: middle;
 }
 
-.hw-green { background: #16a34a; }
-.hw-yellow { background: #facc15; }
-.hw-red { background: #dc2626; }
-.hw-lightred { background: #f87171; }
-.hw-gray { background: #555555; }
+/* The Row marking colors window is only to look at: the form can't be clicked, the buttons and the X close it. */
+.demo-modal.view-only .p-dialog-content {
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+/* Statistika: the export button of a chart opens the list CSV, JSON, Excel (see PortonExport in assets/stats-demo.js). */
+.shot[data-pic='stats'] .panel-actions {
+    position: relative;
+}
+
+.shot[data-pic='stats'] .panel-actions .icon-btn:has(.pi-upload) {
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+.shot[data-pic='stats'] .panel-actions .icon-btn:has(.pi-upload):focus-visible {
+    outline: 2px solid #c3f832;
+    outline-offset: 2px;
+}
+
+.shot[data-pic='stats'] .export-menu {
+    left: auto;
+    right: 0;
+    min-width: 8rem;
+}
+
+.shot[data-pic='stats'] .export-menu .dd-option i {
+    font-size: 13px;
+}
+
+.shot[data-pic='stats'] .export-menu .dd-json {
+    font-weight: 700;
+    font-size: 12px;
+    width: 13px;
+    text-align: center;
+    color: var(--p-blue-500);
+}
+
+/* Statistika, guests tab: the export button of a table card. */
+.shot[data-pic='stats'] .table-card-actions {
+    position: relative;
+}
+
+.shot[data-pic='stats'] .table-card-actions .icon-btn {
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+.shot[data-pic='stats'] .table-card-actions .icon-btn:focus-visible {
+    outline: 2px solid #c3f832;
+    outline-offset: 2px;
+}
+
+/* Home tiles: the settings button makes the tiles shake so they can be dragged into a new order */
+.shot[data-pic='home'] .layout-btn.tiles-btn {
+    pointer-events: auto;
+    cursor: pointer;
+    transition: background-color .15s, color .15s, border-color .15s;
+}
+.shot[data-pic='home'] .layout-btn.tiles-btn:hover { color: #e8ecea; border-color: #3b4440; }
+.shot[data-pic='home'] .layout-btn.tiles-btn[aria-pressed='true'] { color: #c3f832; border-color: #c3f832; }
+.shot[data-pic='home'] .layout-btn.tiles-btn:focus-visible { outline: 2px solid #c3f832; outline-offset: 2px; }
+.shot[data-pic='home'].tiles-editing .metric-tile {
+    pointer-events: auto;
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    animation: tile-shake .36s ease-in-out infinite;
+    animation-delay: var(--shake-delay, 0s);
+}
+.shot[data-pic='home'].tiles-editing .metric-tile.shake-alt { animation-name: tile-shake-alt; }
+.shot[data-pic='home'].tiles-editing .metric-tile.dragging {
+    cursor: grabbing;
+    animation: none;
+    position: relative;
+    z-index: 5;
+    box-shadow: 0 14px 30px rgba(0, 0, 0, .55);
+    border-color: #c3f832;
+}
+@keyframes tile-shake { 0%, 100% { rotate: -1.1deg; } 50% { rotate: 1.1deg; } }
+@keyframes tile-shake-alt { 0%, 100% { rotate: 1.1deg; } 50% { rotate: -1.1deg; } }
+@media (prefers-reduced-motion: reduce) {
+    .shot[data-pic='home'].tiles-editing .metric-tile { animation: none; outline: 1px dashed #c3f832; outline-offset: 2px; }
+}
+
+/* Room above the tiles so the shaking corners are not cut off by the edge of the picture */
+.shot[data-pic='home'] .guide-pic-frame {
+    padding-top: 16px;
+}
+
+/* Automation: the "every N days" fields can be typed in and stepped with their arrows while their box is ticked */
+.shot[data-pic='automation'] .p-inputnumber { pointer-events: auto; }
+.shot[data-pic='automation'] .p-inputnumber-input { pointer-events: none; }
+.shot[data-pic='automation'] .p-inputnumber:not(.p-disabled) .p-inputnumber-input { pointer-events: auto; cursor: text; }
+.shot[data-pic='automation'] .p-inputnumber:not(.p-disabled) .p-inputnumber-button { cursor: pointer; }
+.shot[data-pic='automation'] .p-inputnumber:not(.p-disabled) .p-inputnumber-button:hover { background: rgba(255, 255, 255, 0.08); }
+.shot[data-pic='automation'] .p-inputnumber.p-disabled { cursor: default; }
+.shot[data-pic='automation'] .p-inputnumber-input:focus { outline: 2px solid #c3f832; outline-offset: -2px; }
+
+/* Automation: the hour and minute boxes open a list */
+.shot[data-pic='automation'] .run-at-row .p-select:not(.p-disabled) { pointer-events: auto; cursor: pointer; position: relative; }
+.shot[data-pic='automation'] .run-at-row .p-select:not(.p-disabled):hover { border-color: rgba(255, 255, 255, 0.4); }
+.shot[data-pic='automation'] .run-at-row .p-select:focus-visible { outline: 2px solid #c3f832; outline-offset: 2px; }
+.shot[data-pic='automation'] .am-menu {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    z-index: 30;
+    min-width: 100%;
+    max-height: 13.5rem;
+    overflow-y: auto;
+    box-sizing: border-box;
+    padding: 4px;
+    border: 1px solid #3b4440;
+    border-radius: 8px;
+    background: #1d2321;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+    pointer-events: auto;
+    cursor: default;
+}
+.shot[data-pic='automation'] .am-opt {
+    display: block;
+    width: 100%;
+    padding: 0.42rem 0.6rem;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: #e8ecea;
+    font: inherit;
+    font-size: 13px;
+    text-align: left;
+    cursor: pointer;
+}
+.shot[data-pic='automation'] .am-opt:hover,
+.shot[data-pic='automation'] .am-opt:focus-visible { background: #2c3532; outline: none; }
+.shot[data-pic='automation'] .am-opt.on { color: #c3f832; font-weight: 600; }
+.shot[data-pic='automation'] .run-at-row .p-select.p-disabled { pointer-events: auto; cursor: default; }
+
+/* Hero: two quiet touches. A lime line under the headline, drawn once, and lime brush strokes on the edges of the photo. */
+.h1-rule { display: block; width: min(300px, 55%); height: 6px; margin-top: 20px; border-radius: 3px; background: #c3f832; transform-origin: left; animation: hero-rule 0.9s 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+@keyframes hero-rule { from { transform: scaleX(0); } to { transform: none; } }
+@media (prefers-reduced-motion: reduce) { .h1-rule { animation: none; } }
+
+/* ---------- phones: smaller hero, icon row and plans; the phone sits over the laptop's lower edge ---------- */
+@media (max-width: 600px) {
+    .h1 { font-size: 48px; }
+    .lead { font-size: 17px; line-height: 1.5; }
+    .hero { gap: 22px; }
+    .h1-rule { height: 5px; margin-top: 16px; }
+    .btn-lg { min-height: 48px; padding: 0 26px; font-size: 16px; }
+    .strip { margin-bottom: 24px; border-radius: 16px; }
+    .strip-item { padding: 14px 12px; gap: 9px; }
+    .strip-icon { width: 20px; height: 20px; }
+    .strip-name { font-size: 15px; }
+    .plan { padding: 24px; border-radius: 20px; }
+    .plan-name { font-size: 24px; }
+    .plan-price { margin-top: 10px; font-size: 34px; }
+    .plan-plus { margin-top: 18px; font-size: 15px; }
+    .plan-list { margin: 14px 0 22px; }
+    .plan-list li { padding: 6px 0; font-size: 15px; gap: 10px; }
+    .plan-list li::before { width: 16px; height: 16px; }
+}
+/* On a phone the small phone sits over the laptop's bottom-right corner, as on a laptop screen, just smaller. */
+@media (max-width: 991px) {
+    .duo { padding-bottom: 150px; }
+    .duo .phone { position: absolute; right: -4px; bottom: 0; z-index: 2; width: 46%; margin: 0; padding: 7px; border-radius: 28px; }
+    .duo .phone-screen { min-height: 0; aspect-ratio: 9 / 18.5; padding-top: 26px; border-radius: 22px; }
+    .duo .phone::before { top: 13px; width: 46px; height: 13px; border-radius: 8px; }
+    .duo .phone::after { top: 60px; height: 36px; }
+    .duo .phone .guide-pic-frame { padding: 8px; }
+}
+@media (max-width: 991px) {
+    .page-section { overflow-x: clip; }
+}
+
+/* ---------- phones: the three big pictures show only part of the page, drawn larger so the text is readable ---------- */
+@media (max-width: 599px) {
+    /* Pregled: four tiles (two by two) and the first ten houses (two by two as well, so the names fit) */
+    .shot[data-pic='home'] .metrics-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+    .shot[data-pic='home'] .metrics-grid .metric-tile { aspect-ratio: auto !important; min-height: 92px; }
+    .shot[data-pic='home'] .metrics-grid .metric-tile:nth-child(n + 5) { display: none; }
+    .shot[data-pic='home'] .house-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+    .shot[data-pic='home'] .house-grid .house-card:nth-child(n + 11) { display: none; }
+    /* Rezervacije: all the houses, and the first six days */
+    .shot[data-pic='res'] .reservation-table tr > :nth-child(n + 8) { display: none; }
+    /* Statistika, Pregled tab: three totals and the year comparison with its line chart */
+    .shot[data-pic='stats']:has(.chart-grid) .totals-rule,
+    .shot[data-pic='stats']:has(.chart-grid) .stats-toolbar,
+    .shot[data-pic='stats']:has(.chart-grid) .stats-toolbar + .table-card,
+    .shot[data-pic='stats'] .chart-grid > .chart-panel:first-child,
+    .shot[data-pic='stats']:has(.chart-grid) .usage-grid .usage-tile:nth-child(n + 4) { display: none; }
+    .shot[data-pic='stats']:has(.chart-grid) .usage-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .shot[data-pic='stats'] .chart-grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* Both plan cards are the same height, also when they are stacked on a phone. */
+.plans { grid-auto-rows: 1fr; }
+
+/* Phones: the icon row is a row of pills that can be swiped sideways; the last one runs off the edge so it is clear there is more. */
+@media (max-width: 599px) {
+    .strip { display: flex; gap: 10px; margin: 0 -24px 26px 0; padding: 0 24px 2px 0; overflow-x: auto; overflow-y: hidden; background: none; border: 0; border-radius: 0; -webkit-backdrop-filter: none; backdrop-filter: none; scroll-snap-type: x proximity; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+    .strip::-webkit-scrollbar { display: none; }
+    .strip-item { flex: none; grid-column: auto; padding: 11px 18px; gap: 9px; border: 1px solid rgba(255, 255, 255, 0.22) !important; border-radius: 999px; background: rgba(11, 15, 15, 0.55); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); scroll-snap-align: start; white-space: nowrap; }
+    .strip-name { white-space: nowrap; }
+}
