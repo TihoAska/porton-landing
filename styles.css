@@ -2783,3 +2783,10 @@ button:focus-visible {
 /* A fully marked title (Rezervacije) has black letters on the lime, so while the stroke is being drawn its letters stay light, and a black copy follows the lime. */
 .js-reveal [data-mark-full] .mark:not(.done) { color: inherit; }
 .js-reveal [data-mark-full] .mark:not(.done)::before { display: block; clip-path: none; }
+
+/* Wide screens (desktops): the whole page is drawn at 80%, as if the browser were zoomed to 80%. Phones and tablets are not touched. */
+@media (min-width: 992px) {
+    body { zoom: 0.8; }
+    /* The hero fills the window height; inside the zoomed page a height in vh is 20% shorter, so it is made 25% taller. */
+    .hero-wrap { min-height: min(125svh, 980px); }
+}

@@ -338,7 +338,9 @@
     function centerOf(el, inner, scale) {
         var r = el.getBoundingClientRect();
         var i = inner.getBoundingClientRect();
-        return { x: (r.left - i.left + r.width / 2) / scale, y: (r.top - i.top + r.height / 2) / scale };
+        // Screen pixels per picture pixel: the picture's own scale, and the page zoom on wide screens, together.
+        var k = i.width / (inner.offsetWidth || 1) || scale;
+        return { x: (r.left - i.left + r.width / 2) / k, y: (r.top - i.top + r.height / 2) / k };
     }
 
     function placeCursor(cursor, x, y, ms) {
