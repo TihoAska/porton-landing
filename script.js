@@ -18,6 +18,7 @@
             "RESERVATIONS.HEADER.TOOLTIPS.ROW-HEIGHT-SPACIOUS": "Row height: Spacious",
             "RESERVATIONS.HEADER.TOOLTIPS.ROW-HEIGHT-COMFORTABLE": "Row height: Default",
             "RESERVATIONS.HEADER.TOOLTIPS.ROW-HEIGHT-COMPACT": "Row height: Compact",
+            "RESERVATIONS.HEADER.ROW-HEIGHT-MODAL-TITLE": "Options",
             "RESERVATIONS.HOUSE": "House",
             "RESERVATIONS.MODAL.LAST-NAME": "Last name",
             "RESERVATIONS.MODAL.RESERVATION-NUMBER": "Reservation number",
@@ -169,6 +170,7 @@
             "RESERVATIONS.HEADER.TOOLTIPS.ROW-HEIGHT-SPACIOUS": "Visina ćelije: Prostrano",
             "RESERVATIONS.HEADER.TOOLTIPS.ROW-HEIGHT-COMFORTABLE": "Visina ćelije: Zadano",
             "RESERVATIONS.HEADER.TOOLTIPS.ROW-HEIGHT-COMPACT": "Visina ćelije: Kompaktno",
+            "RESERVATIONS.HEADER.ROW-HEIGHT-MODAL-TITLE": "Opcije",
             "RESERVATIONS.HOUSE": "Kućica",
             "RESERVATIONS.MODAL.LAST-NAME": "Prezime",
             "RESERVATIONS.MODAL.RESERVATION-NUMBER": "Broj rezervacije",
@@ -479,6 +481,134 @@
         });
     }, { threshold: 0.35 }) : null;
 
+    // ---- count-up: when Pregled and Statistika come into view, their numbers count up from 0 and their graphs draw at the same time (once) ----
+    // Pregled shows a day with something going on (the app's own copy has 0 arrivals and 0 departures).
+    var HOME_DEMO = [
+        null,
+        { value: 2, total: 5, line: 'M0,26 L20,26 L40,20 L60,20 L80,14 L100,14' },
+        { value: 3, total: 6, line: 'M0,26 L20,22 L40,22 L60,16 L80,16 L100,10' },
+        { value: 2, total: 0, line: 'M0,26 L25,26 L50,20 L75,20 L100,14' }
+    ];
+    function patchHome(box) {
+        var tiles = box.querySelectorAll('.metrics-grid .metric-tile');
+        HOME_DEMO.forEach(function (d, i) {
+            var tile = tiles[i];
+            if (!d || !tile) return;
+            var val = tile.querySelector('.metric-value');
+            var node = val && Array.prototype.filter.call(val.childNodes, function (n) { return n.nodeType === 3; })[0];
+            if (node) node.nodeValue = d.value + (d.total ? ' ' : '');
+            var tot = tile.querySelector('.metric-value-total');
+            if (tot && d.total) tot.textContent = '/ ' + d.total;
+            var line = tile.querySelector('.spark-line');
+            var area = tile.querySelector('.spark-area');
+            if (line) line.setAttribute('d', d.line);
+            if (area) area.setAttribute('d', d.line + ' L100,28 L0,28 Z');
+        });
+    }
+    var clipCount = 0;
+    function countItems(box) {
+        var kind = box.getAttribute('data-pic');
+        var items = [];
+        // A number in the first text of an element (4, +12.5, 1284): it counts up from 0 with the same number of decimals.
+        function numItem(el, delay, dur) {
+            if (!el) return;
+            var node = Array.prototype.filter.call(el.childNodes, function (n) { return n.nodeType === 3 && /\d/.test(n.nodeValue); })[0];
+            var m = node && /^(\s*[+-]?)(\d+)([.,](\d+))?([\s\S]*)$/.exec(node.nodeValue);
+            if (!m) return;
+            var dec = m[4] ? m[4].length : 0;
+            var sep = m[3] ? m[3].charAt(0) : '.';
+            var target = parseFloat(m[2] + (m[4] ? '.' + m[4] : ''));
+            items.push({
+                delay: delay, dur: dur, el: el,
+                set: function (p) {
+                    var v = target * p;
+                    node.nodeValue = m[1] + (dec ? v.toFixed(dec).replace('.', sep) : String(Math.round(v))) + m[5];
+                }
+            });
+        }
+        if (kind === 'home') {
+            Array.prototype.forEach.call(box.querySelectorAll('.metrics-grid .metric-tile'), function (tile, i) {
+                numItem(tile.querySelector('.metric-value'), i * 150, 1700);
+                var sp = tile.querySelector('.metric-sparkline');
+                if (sp) items.push({ delay: i * 150, dur: 1700, set: function (p) { sp.style.clipPath = 'inset(0 ' + ((1 - p) * 100) + '% 0 0)'; }, done: function () { sp.style.clipPath = ''; } });
+            });
+        } else if (kind === 'stats') {
+            Array.prototype.forEach.call(box.querySelectorAll('.usage-tile'), function (tile, i) {
+                numItem(tile.querySelector('.usage-value'), (i % 5) * 100, 1500);
+                numItem(tile.querySelector('.usage-hint'), (i % 5) * 100, 1500);
+            });
+            Array.prototype.forEach.call(box.querySelectorAll('.stat-value'), function (el) { numItem(el, 250, 2000); });
+            Array.prototype.forEach.call(box.querySelectorAll('svg.plot'), function (svg) {
+                // Bars grow up from the bottom line.
+                var bars = Array.prototype.slice.call(svg.querySelectorAll('rect.bar')).map(function (r) {
+                    return { r: r, y: parseFloat(r.getAttribute('y')), h: parseFloat(r.getAttribute('height')) };
+                });
+                if (bars.length) items.push({ delay: 250, dur: 2000, set: function (p) { bars.forEach(function (b) { b.r.setAttribute('height', b.h * p); b.r.setAttribute('y', b.y + b.h * (1 - p)); }); } });
+                // Lines (with their areas and dots) are drawn from the left, by a window that opens to the right.
+                var shapes = Array.prototype.slice.call(svg.children).filter(function (n) { return /^(polygon|polyline|circle)$/.test(n.tagName); });
+                if (shapes.length) {
+                    var NS = 'http://www.w3.org/2000/svg';
+                    var id = 'plot-clip-' + (++clipCount);
+                    var defs = document.createElementNS(NS, 'defs');
+                    var cp = document.createElementNS(NS, 'clipPath');
+                    var rect = document.createElementNS(NS, 'rect');
+                    cp.setAttribute('id', id);
+                    rect.setAttribute('x', '0'); rect.setAttribute('y', '0'); rect.setAttribute('width', '0'); rect.setAttribute('height', '272');
+                    cp.appendChild(rect); defs.appendChild(cp);
+                    var g = document.createElementNS(NS, 'g');
+                    g.setAttribute('clip-path', 'url(#' + id + ')');
+                    svg.insertBefore(defs, shapes[0]);
+                    svg.insertBefore(g, shapes[0]);
+                    shapes.forEach(function (s) { g.appendChild(s); });
+                    items.push({ delay: 250, dur: 2000, set: function (p) { rect.setAttribute('width', 38 + 540 * p); }, done: function () { g.removeAttribute('clip-path'); } });
+                }
+            });
+        }
+        return items;
+    }
+    // Draws the picture with its starting numbers (0, empty graphs), ready for playCount.
+    function prepCount(box) {
+        var kind = box.getAttribute('data-pic');
+        if (kind !== 'home' && kind !== 'stats') return;
+        if (kind === 'home') patchHome(box);
+        box._count = null;
+        if (reduceMotion || !countWatcher || box._counted) return;
+        box._count = countItems(box);
+        box._count.forEach(function (it) { it.set(0); });
+    }
+    function playCount(box) {
+        var items = box._count;
+        if (!items || box._counted) return;
+        box._counted = true;
+        // A number keeps the room of its final size, so the graph next to it does not move while it counts.
+        items.forEach(function (it) {
+            if (!it.el || it.el.className.indexOf('metric-value') === -1) return;
+            it.set(1);
+            it.el.style.minWidth = it.el.offsetWidth + 'px';
+            it.set(0);
+        });
+        var t0 = performance.now();
+        function frame(now) {
+            var all = true;
+            items.forEach(function (it) {
+                var p = Math.max(0, Math.min(1, (now - t0 - it.delay) / it.dur));
+                if (p < 1) all = false;
+                var e = 1 - Math.pow(1 - p, 3);
+                if (e !== it._e) { it._e = e; it.set(e); }
+            });
+            if (!all) requestAnimationFrame(frame);
+            else items.forEach(function (it) { if (it.done) it.done(); if (it.el) it.el.style.minWidth = ''; });
+        }
+        requestAnimationFrame(frame);
+    }
+    var countWatcher = window.IntersectionObserver ? new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+            if (!e.isIntersecting) return;
+            countWatcher.unobserve(e.target);
+            playCount(e.target);
+        });
+    }, { threshold: 0.3 }) : null;
+
     // ---- the app's own pages, drawn from the app's copies (assets/app/pictures.js, made from the guide's pictures) ----
     // Each copy is drawn at a fixed width and scaled down to fit its half of the page, and cut at a set height.
     function drawOne(box, keepToken) {
@@ -487,10 +617,20 @@
         if (!pic) return;
         box.innerHTML = '<div class="shot-inner"><div class="' + pic.cls + '">' + pic.html + '</div></div>';
         box._pic = pic;
+        // Rezervacije on a phone: the menu button (the row height, colours and export in one) is there from the start, not only after the animation.
+        var sw = box.querySelector('.year-switcher');
+        if (sw && !sw.querySelector('.mobile-picker-btn')) {
+            var mb = document.createElement('span');
+            mb.className = 'icon-btn mobile-picker-btn';
+            mb.innerHTML = '<i class="pi pi-bars"></i>';
+            sw.appendChild(mb);
+        }
         box.setAttribute('data-ready', '1');
         if (!keepToken) box._token = (box._token || 0) + 1;
         fitOne(box);
         wireInteractive(box);
+        // After the wiring, which redraws parts of Statistika from what is on screen: the zeros go on the numbers that stay.
+        prepCount(box);
     }
 
     // ---- the few things in the copies that really work: search the houses, change the Statistics tabs, tick the Automation boxes ----
@@ -1893,6 +2033,65 @@
             });
         }
 
+        // ---- on a phone: the row height, colours and export buttons are one menu button, which opens the Options window (as in the app) ----
+        var mbtn = inner.querySelector('.year-switcher .mobile-picker-btn');
+        if (mbtn) {
+            var optTitle = T('RESERVATIONS.HEADER.ROW-HEIGHT-MODAL-TITLE');
+            var openOptions = function () {
+                if (modal) return;
+                modal = document.createElement('div');
+                modal.className = 'demo-modal live-modal options-modal';
+                var heights = [[40, 'SPACIOUS'], [30, 'COMFORTABLE'], [25, 'COMPACT']];
+                var list = heights.map(function (h) {
+                    return '<span class="opt-btn' + (ui.cell === h[0] ? ' on' : '') + '" data-h="' + h[0] + '">' + T('RESERVATIONS.HEADER.TOOLTIPS.ROW-HEIGHT-' + h[1]) + '</span>';
+                }).join('');
+                var markLabel = dens[0] ? (dens[0].getAttribute('aria-label') || '') : '';
+                modal.innerHTML = '<div class="demo-modal-mask"></div><div class="demo-modal-box guide-pic-reservations-window">' +
+                    '<div class="p-dialog p-component" style="width: 300px">' +
+                    '<div class="p-dialog-header"><span class="p-dialog-title"></span><div class="p-dialog-header-actions">' +
+                    '<span class="p-button p-component p-button-icon-only p-button-secondary p-button-rounded p-button-text p-dialog-close-button"><i class="pi pi-times"></i></span></div></div>' +
+                    '<div class="p-dialog-content"><div class="opt-list">' + list +
+                    '<span class="opt-btn opt-outlined" data-act="mark"><i class="pi pi-palette"></i><span class="opt-label"></span></span>' +
+                    '<span class="opt-btn opt-outlined" data-act="export" aria-expanded="false"><i class="pi pi-upload"></i><span class="opt-label"></span></span>' +
+                    '<div class="opt-export" hidden></div>' +
+                    '</div></div></div></div>';
+                modal.querySelector('.p-dialog-title').textContent = optTitle;
+                modal.querySelector('[data-act="mark"] .opt-label').textContent = markLabel;
+                modal.querySelector('[data-act="export"] .opt-label').textContent = T('EXPORT.BUTTON');
+                var optBtns = modal.querySelectorAll('.opt-btn');
+                Array.prototype.forEach.call(optBtns, function (b) { b.setAttribute('role', 'button'); b.setAttribute('tabindex', '0'); });
+                Array.prototype.forEach.call(modal.querySelectorAll('.opt-btn[data-h]'), function (b, i) {
+                    asBtn(b, function () { if (dens[i + 1]) dens[i + 1].click(); closeWindow(); });
+                });
+                asBtn(modal.querySelector('[data-act="mark"]'), function () { closeWindow(); openMarking(); });
+                var expList = modal.querySelector('.opt-export');
+                [['csv', 'EXPORT.CSV'], ['json', 'EXPORT.JSON'], ['xlsx-raw', 'EXPORT.EXCEL-RAW'], ['xlsx-table', 'EXPORT.EXCEL-TABLE']].forEach(function (it) {
+                    var b = document.createElement('span');
+                    b.className = 'opt-btn opt-sub';
+                    b.textContent = T(it[1]);
+                    expList.appendChild(b);
+                    asBtn(b, function () { exportAs(it[0]); closeWindow(); });
+                });
+                var expBtn = modal.querySelector('[data-act="export"]');
+                asBtn(expBtn, function () {
+                    var open = expList.hidden;
+                    if (open) withXlsx(function () { });
+                    expList.hidden = !open;
+                    expBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+                });
+                asBtn(modal.querySelector('.p-dialog-close-button'), closeWindow, optTitle);
+                modal.querySelector('.demo-modal-mask').addEventListener('click', closeWindow);
+                root.appendChild(modal);
+                void modal.offsetWidth;
+                modal.classList.add('open');
+                var cont = inner.querySelector('.reservations-container');
+                if (cont) cont.classList.add('demo-blur');
+                document.addEventListener('keydown', onKey);
+            };
+            asBtn(mbtn, openOptions, optTitle);
+            mbtn.setAttribute('aria-haspopup', 'dialog');
+        }
+
     }
 
     function wireAutomation(box) {
@@ -2024,6 +2223,7 @@
         document.querySelectorAll('.shot[data-pic]').forEach(function (box) {
             drawOne(box, false);
             box._running = false;
+            if (box._count && countWatcher && !box._counted) countWatcher.observe(box);
             if (!box.hasAttribute('data-anim')) return;
             if (watcher && !box._watched) { box._watched = true; watcher.observe(box); }
             else if (box._visible) runLoop(box);
@@ -2052,6 +2252,57 @@
         document.querySelectorAll('.shot[data-ready]').forEach(fitOne);
     }
 
+    // ---- drawing in: the lime marks and lines draw themselves and the big numbers count up, once, when they come into view ----
+    var reveal = !reduceMotion && !!window.IntersectionObserver;
+    if (reveal) document.documentElement.classList.add('js-reveal');
+    var markWatcher = reveal ? new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+            if (!e.isIntersecting) return;
+            markWatcher.unobserve(e.target);
+            e.target.classList.add('drawn');
+            // When the stroke is drawn the mark goes back to its normal look (also for a title whose letters are black on the lime).
+            e.target.addEventListener('animationend', function () { e.target.classList.add('done'); }, { once: true });
+            if (e.target.parentNode) e.target.parentNode._drawn = true;
+        });
+    }, { threshold: 0.6, rootMargin: '0px 0px -10% 0px' }) : null;
+    // The loose lime lines of a section are drawn when the section is half in view.
+    if (reveal) {
+        var strokeWatcher = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) {
+                if (!e.isIntersecting) return;
+                strokeWatcher.unobserve(e.target);
+                Array.prototype.forEach.call(e.target.querySelectorAll('.strokes'), function (st) { st.classList.add('drawn'); });
+            });
+        }, { threshold: 0.15 });
+        document.querySelectorAll('.page-strokes').forEach(function (sec) { strokeWatcher.observe(sec); });
+        // The four big numbers: the bar grows and the number counts up from 0, one after the other.
+        var figWatcher = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) {
+                if (!e.isIntersecting) return;
+                figWatcher.unobserve(e.target);
+                var fig = e.target.querySelector('.intro-figure');
+                if (!fig) return;
+                var delay = Array.prototype.indexOf.call(e.target.parentNode.children, e.target) * 150;
+                var target = parseInt(fig._target, 10) || 0;
+                fig.style.setProperty('--d', (delay / 1000) + 's');
+                fig.classList.add('shown');
+                var t0 = performance.now();
+                (function frame(now) {
+                    var p = Math.max(0, Math.min(1, (now - t0 - delay) / 1300));
+                    fig.textContent = String(Math.round(target * (1 - Math.pow(1 - p, 3))));
+                    if (p < 1) requestAnimationFrame(frame);
+                })(t0);
+            });
+        }, { threshold: 0.5 });
+        document.querySelectorAll('.intro-number').forEach(function (num) {
+            var fig = num.querySelector('.intro-figure');
+            if (!fig) return;
+            fig._target = fig.textContent;
+            fig.textContent = '0';
+            figWatcher.observe(num);
+        });
+    }
+
     // ---- text and links ----
     function applyText() {
         document.documentElement.lang = lang;
@@ -2067,6 +2318,8 @@
                 mark.className = 'mark';
                 mark.textContent = words.slice(0, count).join(' ');
                 mark.setAttribute('data-text', mark.textContent);
+                // A title that has been drawn once stays drawn when the language changes; a new one is watched until it is on screen.
+                if (markWatcher) { if (el._drawn) mark.classList.add('done'); else markWatcher.observe(mark); }
                 el.textContent = '';
                 el.appendChild(mark);
                 if (words.length > count) { el.appendChild(document.createTextNode(' ' + words.slice(count).join(' '))); }
