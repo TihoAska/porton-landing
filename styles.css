@@ -2790,3 +2790,13 @@ button:focus-visible {
     /* The hero fills the window height; inside the zoomed page a height in vh is 20% shorter, so it is made 25% taller. */
     .hero-wrap { min-height: min(125svh, 980px); }
 }
+
+/* Bigger screens: the page is drawn larger so it does not look tiny. */
+@media (min-width: 1600px) {
+    body { zoom: 0.9; }
+    .hero-wrap { min-height: min(111svh, 1000px); }
+}
+@media (min-width: 1920px) {
+    body { zoom: 1; }
+    .hero-wrap { min-height: min(100svh, 1080px); }
+}
